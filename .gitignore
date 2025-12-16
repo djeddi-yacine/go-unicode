@@ -1,16 +1,2 @@
-# Unicode test data files
 *.txt
-
-# Test binaries
 test_fsm
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db

@@ -1,103 +1,11 @@
 package uax29
 
-// SentenceBreakClass represents the Sentence_Break property values defined in UAX #29.
-//
-// These classes are used to implement the sentence boundary detection algorithm.
-// Each Unicode character is assigned one of these properties, which determines
-// how sentence boundaries are computed around it.
-//
-// See UAX #29 Table 4: https://www.unicode.org/reports/tr29/#Table_Sentence_Break_Property_Values
-type SentenceBreakClass int
-
-const (
-	// SBOther represents characters that don't fall into any specific category.
-	// Default for most characters.
-	SBOther SentenceBreakClass = iota
-
-	// SBCR represents carriage return (U+000D).
-	// See UAX #29 SB3: https://www.unicode.org/reports/tr29/#SB3
-	SBCR
-
-	// SBLF represents line feed (U+000A).
-	// See UAX #29 SB3: https://www.unicode.org/reports/tr29/#SB3
-	SBLF
-
-	// SBSep represents paragraph separators (U+2029, etc.).
-	// See UAX #29 SB4: https://www.unicode.org/reports/tr29/#SB4
-	SBSep
-
-	// SBExtend represents extending characters (combining marks).
-	// These are ignored in sentence breaking.
-	// See UAX #29 SB5: https://www.unicode.org/reports/tr29/#SB5
-	SBExtend
-
-	// SBFormat represents format control characters.
-	// These are ignored in sentence breaking.
-	// See UAX #29 SB5: https://www.unicode.org/reports/tr29/#SB5
-	SBFormat
-
-	// SBSp represents spaces and related characters.
-	// See UAX #29 SB8-SB10: https://www.unicode.org/reports/tr29/#SB8
-	SBSp
-
-	// SBLower represents lowercase letters.
-	// Important for abbreviation detection after periods.
-	// See UAX #29 SB8: https://www.unicode.org/reports/tr29/#SB8
-	SBLower
-
-	// SBUpper represents uppercase letters.
-	// See UAX #29 SB7: https://www.unicode.org/reports/tr29/#SB7
-	SBUpper
-
-	// SBOLetter represents other letters (neither upper nor lower).
-	// See UAX #29 SB7: https://www.unicode.org/reports/tr29/#SB7
-	SBOLetter
-
-	// SBATerm represents sentence terminators with ambiguous periods (., U+002E).
-	// Period can be abbreviation or sentence terminator.
-	// See UAX #29 SB6-SB8: https://www.unicode.org/reports/tr29/#SB6
-	SBATerm
-
-	// SBSTerm represents unambiguous sentence terminators (?, !, etc.).
-	// See UAX #29 SB9-SB11: https://www.unicode.org/reports/tr29/#SB9
-	SBSTerm
-
-	// SBNumeric represents numeric characters.
-	// See UAX #29 SB6: https://www.unicode.org/reports/tr29/#SB6
-	SBNumeric
-
-	// SBSContinue represents sentence continuators like comma.
-	// See UAX #29 SB8a: https://www.unicode.org/reports/tr29/#SB8a
-	SBSContinue
-
-	// SBClose represents closing punctuation (quotes, parentheses, etc.).
-	// Can appear after sentence terminators before the break.
-	// See UAX #29 SB9-SB10: https://www.unicode.org/reports/tr29/#SB9
-	SBClose
-)
+// SentenceBreakClass type and constants are defined in classes.go
 
 // getSentenceBreakClass returns the sentence break class for a rune.
-// This function uses binary search on the generated sentence break property data.
+// This function uses binary search on the unified packed break property data.
 func getSentenceBreakClass(r rune) SentenceBreakClass {
-	// Binary search on the generated data table
-	left, right := 0, len(sentenceBreakData)-1
-
-	for left <= right {
-		mid := (left + right) / 2
-		entry := sentenceBreakData[mid]
-
-		if r < entry.start {
-			right = mid - 1
-		} else if r > entry.end {
-			left = mid + 1
-		} else {
-			// Found the range containing r
-			return entry.class
-		}
-	}
-
-	// Default: Other
-	return SBOther
+	return classifyRune(r).Sentence()
 }
 
 // FindSentenceBreaks returns the byte positions where sentence breaks occur in the given text.
