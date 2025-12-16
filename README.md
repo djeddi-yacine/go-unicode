@@ -40,6 +40,34 @@ When Go's `unicode` package updates to Unicode 17.0.0, we will continue maintain
 go get github.com/SCKelemen/unicode
 ```
 
+## Packages
+
+### UAX #11: East Asian Width (`uax11`)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uax11.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uax11)
+
+Implementation of [UAX #11 (East Asian Width)](https://www.unicode.org/reports/tr11/) for determining character display width in East Asian typography contexts.
+
+**Key Features:**
+- Character width classification (Fullwidth, Halfwidth, Wide, Narrow, Ambiguous, Neutral)
+- Context-aware width resolution for Ambiguous characters
+- Display width calculation for strings
+- Terminal emulator support
+- Text alignment and truncation utilities
+
+**Quick Example:**
+```go
+import "github.com/SCKelemen/unicode/uax11"
+
+// Check character width
+width := uax11.LookupWidth('中')  // Returns Wide
+
+// Calculate display width
+displayWidth := uax11.StringWidth("Hello世界", uax11.ContextNarrow)  // Returns 9
+```
+
+[Full Documentation →](./uax11/README.md)
+
 ## References
 
 ### Metastandards
