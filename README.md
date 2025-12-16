@@ -230,4 +230,4 @@ sentences := uax29.Sentences("Hello Dr. Smith. How are you?")
 
 ## License
 
-MIT
+BearWare 1.0 (MIT Compatible)
