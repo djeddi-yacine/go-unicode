@@ -152,6 +152,38 @@ dir := uax9.GetParagraphDirection("שלום עולם")
 
 [Full Documentation →](./uax9/README.md)
 
+### UAX #14: Line Breaking Algorithm (`uax14`)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uax14.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uax14)
+
+Implementation of [UAX #14 (Unicode Line Breaking Algorithm)](https://www.unicode.org/reports/tr14/) for finding valid line break opportunities in text.
+
+**Dependencies:** UAX #11 (East Asian Width)
+
+**Key Features:**
+- Finds valid line break opportunities according to UAX #14
+- Three hyphenation modes (none, manual, auto)
+- CJK ideographic text support
+- Mandatory breaks (newlines, paragraph separators)
+- Punctuation and numeric sequence rules
+- 100% conformance (19,338/19,338 test cases passing)
+
+**Quick Example:**
+```go
+import "github.com/SCKelemen/unicode/uax14"
+
+text := "Hello world! This is a test."
+breaks := uax14.FindLineBreakOpportunities(text, uax14.HyphensManual)
+
+// Use break positions to wrap text
+for i := 1; i < len(breaks); i++ {
+    segment := text[breaks[i-1]:breaks[i]]
+    fmt.Printf("%q\n", segment)
+}
+```
+
+[Full Documentation →](./uax14/README.md)
+
 ## References
 
 ### Metastandards
