@@ -184,6 +184,40 @@ for i := 1; i < len(breaks); i++ {
 
 [Full Documentation →](./uax14/README.md)
 
+### UAX #29: Text Segmentation (`uax29`)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uax29.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uax29)
+
+Implementation of [UAX #29 (Unicode Text Segmentation)](https://www.unicode.org/reports/tr29/) for breaking text into grapheme clusters, words, and sentences.
+
+**Dependencies:** UTS #51 (Unicode Emoji)
+
+**Key Features:**
+- Grapheme cluster boundaries (user-perceived characters)
+- Word boundaries (text selection, cursor movement)
+- Sentence boundaries (text processing)
+- Emoji sequence handling with ZWJ
+- Regional indicator sequences (flag emojis)
+- Indic conjunct sequences
+- 100% conformance (3,222/3,222 test cases passing)
+
+**Quick Example:**
+```go
+import "github.com/SCKelemen/unicode/uax29"
+
+// Break text into grapheme clusters
+text := "👨‍👩‍👧‍👦 Hello"
+clusters := uax29.Graphemes(text)
+
+// Find word boundaries
+words := uax29.Words("Hello, world!")
+
+// Segment sentences
+sentences := uax29.Sentences("Hello Dr. Smith. How are you?")
+```
+
+[Full Documentation →](./uax29/README.md)
+
 ## References
 
 ### Metastandards
