@@ -96,6 +96,34 @@ width := uts51.EmojiWidth('😀')  // Returns 2 (like CJK characters)
 
 [Full Documentation →](./uts51/README.md)
 
+### UAX #50: Vertical Text Layout (`uax50`)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uax50.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uax50)
+
+Implementation of [UAX #50 (Unicode Vertical Text Layout)](https://www.unicode.org/reports/tr50/) for determining character orientation in vertical text.
+
+**Key Features:**
+- Vertical orientation property (Rotated, Upright, Transformed Upright, Transformed Rotated)
+- Character orientation detection for East Asian typography
+- Font shaping support for vertical text
+- Mixed-script vertical text handling
+
+**Quick Example:**
+```go
+import "github.com/SCKelemen/unicode/uax50"
+
+// Check character orientation
+if uax50.IsUpright('中') {
+    fmt.Println("Display CJK ideograph upright")
+}
+
+if uax50.IsRotated('A') {
+    fmt.Println("Rotate Latin letter 90° clockwise")
+}
+```
+
+[Full Documentation →](./uax50/README.md)
+
 ## References
 
 ### Metastandards
