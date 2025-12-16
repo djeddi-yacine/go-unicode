@@ -124,6 +124,34 @@ if uax50.IsRotated('A') {
 
 [Full Documentation →](./uax50/README.md)
 
+### UAX #9: Bidirectional Algorithm (`uax9`)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uax9.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uax9)
+
+Implementation of [UAX #9 (Unicode Bidirectional Algorithm)](https://www.unicode.org/reports/tr9/) for proper display of text containing both LTR and RTL scripts.
+
+**Key Features:**
+- Bidirectional text reordering for mixed LTR/RTL scripts
+- Explicit formatting characters support (LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI)
+- Automatic base direction detection
+- Bracket pair handling (N0 rule)
+- Full isolating run sequences (BD13)
+- 100% conformance (513,494/513,494 test cases passing)
+
+**Quick Example:**
+```go
+import "github.com/SCKelemen/unicode/uax9"
+
+// Reorder mixed LTR/RTL text
+text := "Hello שלום world"
+result := uax9.Reorder(text, uax9.DirectionLTR)
+
+// Auto-detect paragraph direction
+dir := uax9.GetParagraphDirection("שלום עולם")
+```
+
+[Full Documentation →](./uax9/README.md)
+
 ## References
 
 ### Metastandards
