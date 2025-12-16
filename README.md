@@ -68,6 +68,34 @@ displayWidth := uax11.StringWidth("Hello世界", uax11.ContextNarrow)  // Return
 
 [Full Documentation →](./uax11/README.md)
 
+### UTS #51: Unicode Emoji (`uts51`)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uts51.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uts51)
+
+Implementation of [UTS #51 (Unicode Emoji)](https://www.unicode.org/reports/tr51/) for complete emoji support in terminals, text editors, and layout engines.
+
+**Key Features:**
+- Six emoji properties (Emoji, Emoji_Presentation, Emoji_Modifier, Emoji_Modifier_Base, Emoji_Component, Extended_Pictographic)
+- Terminal width calculation for emoji (integrates with UAX #11)
+- Emoji sequence validation (keycap, tag, modifier, flag, ZWJ sequences)
+- Presentation control (text vs emoji mode)
+- 100% conformance (5,223/5,223 test cases passing)
+
+**Quick Example:**
+```go
+import "github.com/SCKelemen/unicode/uts51"
+
+// Check if character is emoji
+if uts51.IsEmoji('😀') {
+    fmt.Println("Is emoji!")
+}
+
+// Calculate width for terminal rendering
+width := uts51.EmojiWidth('😀')  // Returns 2 (like CJK characters)
+```
+
+[Full Documentation →](./uts51/README.md)
+
 ## References
 
 ### Metastandards
