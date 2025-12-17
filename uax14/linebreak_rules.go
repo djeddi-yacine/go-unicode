@@ -700,7 +700,6 @@ func ruleLB19_SP_QU_Pf(ctx *LineBreakContext) (bool, BreakDecision) {
 	return true, BreakNo
 }
 
-
 // ruleLB11 implements: WJ ×, × WJ
 // Do not break before or after word joiner.
 // https://www.unicode.org/reports/tr14/#LB11
@@ -883,7 +882,6 @@ func ruleLB17(ctx *LineBreakContext) (bool, BreakDecision) {
 
 	return false, BreakNo
 }
-
 
 // ruleLB20 implements: CB ÷ (except before certain classes)
 // Break after contingent break opportunity.
