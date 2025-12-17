@@ -4203,7 +4203,9 @@ var pairTable = map[[2]BreakClass]BreakAction{
 
 // pairTableFlat is a cache-friendly flat array version of pairTable.
 // Populated at init time for O(1) direct indexing without map overhead.
-// Size: 256×256 = 65,536 bytes (fits in L2 cache)
+// Note: BreakClass values are sparse (0-144 with gaps). Could be remapped to dense [64][64]
+// for 4KB total, but current [256][256] is simple and still cache-friendly at 64KB.
+// Size: 256×256 = 65,536 bytes = 64KB (fits in L1/L2 cache)
 var pairTableFlat [256][256]BreakAction
 
 func init() {
