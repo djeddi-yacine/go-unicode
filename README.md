@@ -171,6 +171,66 @@ for _, pos := range breaks.Sentences {
 }
 ```
 
+### [uax31](./uax31) - Identifier and Pattern Syntax
+
+Implementation of UAX #31 (Unicode Identifier and Pattern Syntax) for determining valid identifier characters in programming languages and pattern-based systems.
+
+**Status:** Complete with 100% conformance (297,981/297,981 tests passing)
+
+Supports:
+- **XID_Start property** - Characters valid at the start of an identifier
+  - Letters, ideographs, letter numbers across all scripts
+  - Binary search for O(log n) lookups
+- **XID_Continue property** - Characters valid after the first character
+  - XID_Start plus marks, digits, connector punctuation
+  - Includes zero-width joiner and combining marks
+- **Pattern_Syntax property** - Reserved characters for pattern languages
+  - ASCII punctuation and mathematical symbols
+  - Used to identify syntactic elements
+- **Pattern_White_Space property** - Whitespace in patterns
+  - Spaces, tabs, line breaks for pattern tokenization
+- **Default Identifier Syntax** - Complete identifier validation
+  - Pattern: `<XID_Start> <XID_Continue>*`
+  - Stable across Unicode versions
+
+```go
+import "github.com/SCKelemen/unicode/uax31"
+
+// Check if character can start an identifier
+if uax31.IsXIDStart('A') {
+    // Valid identifier start (letters, ideographs)
+}
+
+// Check if character can continue an identifier
+if uax31.IsXIDContinue('5') {
+    // Valid after first character (includes digits, marks)
+}
+
+// Validate complete identifier
+if uax31.IsValidIdentifier("myVar123") {
+    // Valid: starts with letter, continues with letters/digits
+}
+
+// Pattern syntax detection
+if uax31.IsPatternSyntax('*') {
+    // Reserved for pattern languages (regex, etc.)
+}
+
+// Programming language tokenization example
+func isIdentifierChar(r rune, isFirst bool) bool {
+    if isFirst {
+        return uax31.IsXIDStart(r)
+    }
+    return uax31.IsXIDContinue(r)
+}
+
+// Security: Validate identifiers for safety
+identifier := "user_name"
+if uax31.IsValidIdentifier(identifier) {
+    // Identifier follows Unicode standard
+}
+```
+
 ### [uax50](./uax50) - Vertical Text Layout
 
 Implementation of UAX #50 (Unicode Vertical Text Layout) for determining character orientation in vertical text.
@@ -281,6 +341,7 @@ go get github.com/SCKelemen/unicode/uax11
 go get github.com/SCKelemen/unicode/uax14
 go get github.com/SCKelemen/unicode/uax24
 go get github.com/SCKelemen/unicode/uax29
+go get github.com/SCKelemen/unicode/uax31
 go get github.com/SCKelemen/unicode/uax50
 go get github.com/SCKelemen/unicode/uts15
 go get github.com/SCKelemen/unicode/uts51
@@ -484,6 +545,11 @@ All implementations follow the Unicode Standard and are tested against official 
   - Grapheme cluster breaking: 766/766 tests
   - Word breaking: 1,944/1,944 tests
   - Sentence breaking: 512/512 tests
+- **UAX #31 (Identifier and Pattern Syntax)**: 100% conformance (297,981/297,981 tests)
+  - XID_Start and XID_Continue properties
+  - Pattern_Syntax and Pattern_White_Space properties
+  - Default Identifier Syntax validation
+  - Stable across Unicode versions
 - **UAX #50 (Vertical Text Layout)**: Comprehensive test coverage
   - Vertical orientation property for all Unicode code points
   - Glyph transformation detection
@@ -505,6 +571,7 @@ Implementations are validated using the official Unicode Character Database (UCD
 - [UAX #14 Test Files](https://www.unicode.org/Public/17.0.0/ucd/auxiliary/) - `LineBreakTest.txt` (19,338 tests)
 - [UAX #24 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `Scripts.txt` (159,866 tests)
 - [UAX #29 Test Files](https://www.unicode.org/Public/17.0.0/ucd/auxiliary/) - `GraphemeBreakTest.txt`, `WordBreakTest.txt`, `SentenceBreakTest.txt`
+- [UAX #31 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `DerivedCoreProperties.txt` (297,981 tests)
 - [UAX #50 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `VerticalOrientation.txt` property data
 - [UTS #15 Test Files](https://www.unicode.org/Public/17.0.0/ucd/) - `NormalizationTest.txt` (20,034 tests)
 - [UTS #51 Test Files](https://www.unicode.org/Public/emoji/17.0/) - `emoji-test.txt` with 5,223 test cases
