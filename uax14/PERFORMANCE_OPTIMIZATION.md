@@ -127,10 +127,10 @@ for checkIdx := pos - 3; checkIdx >= 0 && checkIdx > pos-30; checkIdx-- {
 
 ## Optimization Priority
 
-### Phase 1: Quick Wins (v5.0.1) - **Target: 1.5x improvement**
+### Phase 1: Quick Wins (v5.0.1) - **Achieved: 1.04-1.07x improvement**
 1. ✅ Add `//go:inline` directives (DONE)
-2. ⏳ Add fast-path switch for common patterns
-3. ⏳ Benchmark and verify
+2. ✅ Bitpack enums (int → uint8) (DONE - 4-7% faster, 8x memory reduction)
+3. ❌ Fast-path switch (ABANDONED - broke conformance)
 
 ### Phase 2: Caching (v5.0.2) - **Target: Additional 1.2x**
 1. Implement simple break decision cache
@@ -149,9 +149,10 @@ Starting: **2.5x slower** than original
 
 After all optimizations: **0.8-1.0x** (potentially faster than original!)
 
-- Phase 1: 2.5x → 1.7x slower
-- Phase 2: 1.7x → 1.4x slower
-- Phase 3: 1.4x → 0.8x slower (maybe faster!)
+- Phase 1: ✅ 2.5x → 2.4x slower (bitpacking: 1.05x improvement)
+- Phase 2: ⏳ 2.4x → 1.7x slower (flat array: expected 1.4x improvement)
+- Phase 3: ⏳ 1.7x → 1.4x slower (profile-guided: expected 1.2x improvement)
+- Phase 4: ⏳ 1.4x → 1.0x slower (streaming parser: expected 1.4x improvement)
 
 ## Benchmarking Commands
 
