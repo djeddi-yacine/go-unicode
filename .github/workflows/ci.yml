@@ -190,7 +190,7 @@ jobs:
         # Run UAX24 conformance tests
         echo "Running UAX #24 conformance tests..."
         cd uax24
-        go test -v -run TestOfficialScripts
+        go test -v -run TestOfficialScriptProperty
         cd ..
 
         # Run UAX31 conformance tests
@@ -248,7 +248,7 @@ jobs:
     - name: UAX #24 - Script Property Conformance Tests
       run: |
         cd uax24
-        go test -v -run TestOfficialScripts
+        go test -v -run TestOfficialScriptProperty
 
     - name: UTS #15 - Normalization Forms Tests
       run: |
