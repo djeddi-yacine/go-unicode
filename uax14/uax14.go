@@ -48,7 +48,7 @@ const (
 )
 
 // BreakClass represents a Unicode line breaking class.
-type BreakClass int
+type BreakClass uint8
 
 const (
 	// Mandatory breaks
@@ -145,7 +145,7 @@ const (
 )
 
 // BreakAction represents the action to take at a line break opportunity.
-type BreakAction int
+type BreakAction uint8
 
 const (
 	// BreakProhibited means no line break is allowed
