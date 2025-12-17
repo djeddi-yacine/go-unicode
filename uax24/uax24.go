@@ -79,7 +79,8 @@ package uax24
 
 // Script represents a Unicode script value following ISO 15924.
 // Each character in Unicode is assigned exactly one script.
-type Script int
+// There are 176 scripts in Unicode 17.0.0, fits in uint8 (0-255).
+type Script uint8
 
 // Script constants following ISO 15924 codes.
 // These are the most commonly used scripts in Unicode 17.0.0.

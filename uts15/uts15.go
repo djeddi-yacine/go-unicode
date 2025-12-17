@@ -78,6 +78,17 @@
 //   - DerivedNormalizationProps.txt: https://www.unicode.org/Public/17.0.0/ucd/DerivedNormalizationProps.txt
 package uts15
 
+// isASCII reports whether s contains only ASCII characters.
+// ASCII characters (0-127) are already normalized in all forms.
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] > 127 {
+			return false
+		}
+	}
+	return true
+}
+
 // NFC returns the NFC (Canonical Composition) normalization of the string.
 //
 // NFC is the recommended normalization form for most uses. It produces
@@ -88,6 +99,10 @@ package uts15
 //
 // See: https://www.unicode.org/reports/tr15/#Norm_Forms
 func NFC(s string) string {
+	// Fast path: ASCII is already in NFC form
+	if isASCII(s) {
+		return s
+	}
 	// Decompose canonically
 	decomposed := nfd(s)
 	// Compose
@@ -104,6 +119,10 @@ func NFC(s string) string {
 //
 // See: https://www.unicode.org/reports/tr15/#Norm_Forms
 func NFD(s string) string {
+	// Fast path: ASCII is already in NFD form
+	if isASCII(s) {
+		return s
+	}
 	return nfd(s)
 }
 
@@ -122,6 +141,10 @@ func NFD(s string) string {
 //
 // See: https://www.unicode.org/reports/tr15/#Norm_Forms
 func NFKC(s string) string {
+	// Fast path: ASCII is already in NFKC form
+	if isASCII(s) {
+		return s
+	}
 	// Decompose with compatibility
 	decomposed := nfkd(s)
 	// Compose
@@ -139,6 +162,10 @@ func NFKC(s string) string {
 //
 // See: https://www.unicode.org/reports/tr15/#Norm_Forms
 func NFKD(s string) string {
+	// Fast path: ASCII is already in NFKD form
+	if isASCII(s) {
+		return s
+	}
 	return nfkd(s)
 }
 
@@ -376,8 +403,8 @@ func compose(s string, compat bool) string {
 	return string(result)
 }
 
-// getCombiningClass returns the canonical combining class for a rune
-func getCombiningClass(r rune) int {
+// getCombiningClass returns the canonical combining class for a rune (0-255)
+func getCombiningClass(r rune) uint8 {
 	if class, ok := combiningClassMap[r]; ok {
 		return class
 	}

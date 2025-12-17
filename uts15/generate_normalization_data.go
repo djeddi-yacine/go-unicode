@@ -23,7 +23,7 @@ const (
 type decompositionData struct {
 	canonical    map[rune][]rune
 	compatibility map[rune][]rune
-	combiningClass map[rune]int
+	combiningClass map[rune]uint8
 	compositions   map[[2]rune]rune
 	exclusions     map[rune]bool
 }
@@ -32,7 +32,7 @@ func main() {
 	data := &decompositionData{
 		canonical:      make(map[rune][]rune),
 		compatibility:  make(map[rune][]rune),
-		combiningClass: make(map[rune]int),
+		combiningClass: make(map[rune]uint8),
 		compositions:   make(map[[2]rune]rune),
 		exclusions:     make(map[rune]bool),
 	}
@@ -107,8 +107,8 @@ func parseUnicodeData(r io.Reader, data *decompositionData) error {
 		// Parse combining class (field 3)
 		if fields[3] != "" && fields[3] != "0" {
 			class, err := strconv.Atoi(fields[3])
-			if err == nil && class > 0 {
-				data.combiningClass[cp] = class
+			if err == nil && class > 0 && class <= 255 {
+				data.combiningClass[cp] = uint8(class)
 			}
 		}
 
@@ -255,8 +255,8 @@ func generateFile(data *decompositionData) error {
 	fmt.Fprintf(out, "}\n\n")
 
 	// Combining class map
-	fmt.Fprintf(out, "// combiningClassMap maps runes to their canonical combining class\n")
-	fmt.Fprintf(out, "var combiningClassMap = map[rune]int{\n")
+	fmt.Fprintf(out, "// combiningClassMap maps runes to their canonical combining class (0-255)\n")
+	fmt.Fprintf(out, "var combiningClassMap = map[rune]uint8{\n")
 	for cp, class := range data.combiningClass {
 		fmt.Fprintf(out, "\t0x%04X: %d,\n", cp, class)
 	}

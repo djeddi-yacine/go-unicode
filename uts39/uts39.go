@@ -300,6 +300,18 @@ func GetIdentifierScripts(s string) []uax24.Script {
 //
 // See: https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
 func IsMixedScript(s string) bool {
+	// Fast path: ASCII is single-script (Latin)
+	isASCII := true
+	for i := 0; i < len(s); i++ {
+		if s[i] > 127 {
+			isASCII = false
+			break
+		}
+	}
+	if isASCII {
+		return false
+	}
+
 	scripts := GetIdentifierScripts(s)
 
 	// Count non-Common, non-Inherited scripts
@@ -339,6 +351,18 @@ func IsValidIdentifier(s string) bool {
 //	IsSafeIdentifier("user_name")      // true
 //	IsSafeIdentifier("user\u200Bname") // false (contains zero-width space)
 func IsSafeIdentifier(s string) bool {
+	// Fast path: ASCII identifiers are safe if valid
+	isASCII := true
+	for i := 0; i < len(s); i++ {
+		if s[i] > 127 {
+			isASCII = false
+			break
+		}
+	}
+	if isASCII {
+		return IsValidIdentifier(s)
+	}
+
 	if !IsValidIdentifier(s) {
 		return false
 	}
