@@ -132,10 +132,10 @@ for checkIdx := pos - 3; checkIdx >= 0 && checkIdx > pos-30; checkIdx-- {
 2. ✅ Bitpack enums (int → uint8) (DONE - 4-7% faster, 8x memory reduction)
 3. ❌ Fast-path switch (ABANDONED - broke conformance)
 
-### Phase 2: Caching (v5.0.2) - **Target: Additional 1.2x**
-1. Implement simple break decision cache
-2. Profile cache hit rates
-3. Tune cache size
+### Phase 2: Flat Array Table (v5.0.2) - **Achieved: 1.025x improvement**
+1. ✅ Replace hash map with flat 2D array (DONE - 0.6-2.5% faster)
+2. ✅ Add sentinel value for "not found" entries (DONE)
+3. ✅ Benchmark and verify (DONE - modest gains, rule iteration is bottleneck)
 
 ### Phase 3: Streaming Parser (v5.1.0 or v6.0.0) - **Target: 2-3x**
 1. Design `LineBreakEnvironment`
@@ -150,9 +150,9 @@ Starting: **2.5x slower** than original
 After all optimizations: **0.8-1.0x** (potentially faster than original!)
 
 - Phase 1: ✅ 2.5x → 2.4x slower (bitpacking: 1.05x improvement)
-- Phase 2: ⏳ 2.4x → 1.7x slower (flat array: expected 1.4x improvement)
-- Phase 3: ⏳ 1.7x → 1.4x slower (profile-guided: expected 1.2x improvement)
-- Phase 4: ⏳ 1.4x → 1.0x slower (streaming parser: expected 1.4x improvement)
+- Phase 2: ✅ 2.4x → 2.35x slower (flat array: 1.025x improvement, modest due to rule iteration bottleneck)
+- Phase 3: ⏳ 2.35x → ? (profile-guided fast path - needs investigation)
+- Phase 4: ⏳ ? → 1.0x slower (streaming parser: architectural change required)
 
 ## Benchmarking Commands
 
