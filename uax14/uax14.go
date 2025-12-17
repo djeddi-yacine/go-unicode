@@ -51,97 +51,96 @@ const (
 type BreakClass uint8
 
 const (
-	// Mandatory breaks
+	// Mandatory breaks (0-4)
 	ClassBK BreakClass = iota // Mandatory Break
 	ClassCR                   // Carriage Return
 	ClassLF                   // Line Feed
 	ClassNL                   // Next Line
 	ClassSP                   // Space
 
-	// Prohibited breaks
-	ClassWJ  BreakClass = iota + 5 // Word Joiner
-	ClassZW                         // Zero Width Space
-	ClassZWJ                        // Zero Width Joiner
+	// Prohibited breaks (5-7)
+	ClassWJ  // Word Joiner
+	ClassZW  // Zero Width Space
+	ClassZWJ // Zero Width Joiner
 
-	// Break opportunities
-	ClassBA BreakClass = iota + 10 // Break After
-	ClassBB                        // Break Before
-	ClassB2                        // Break Opportunity Before and After
-	ClassHY                        // Hyphen
-	ClassCB                        // Contingent Break Opportunity
+	// Break opportunities (8-12)
+	ClassBA // Break After
+	ClassBB // Break Before
+	ClassB2 // Break Opportunity Before and After
+	ClassHY // Hyphen
+	ClassCB // Contingent Break Opportunity
 
-	// Characters
-	ClassAL BreakClass = iota + 20 // Alphabetic
-	ClassHL                        // Hebrew Letter
-	ClassID                        // Ideographic
-	ClassIN                        // Inseparable
-	ClassNU                        // Numeric
-	ClassPR                        // Prefix Numeric
-	ClassPO                        // Postfix Numeric
-	ClassIS                        // Infix Numeric Separator
-	ClassSY                        // Symbols Allowing Break After
-	ClassAI                        // Ambiguous (Alphabetic or Ideographic) - East Asian Width
-	ClassCJ                        // Conditional Japanese Starter
-	ClassSA                        // Complex Context Dependent (South East Asian)
-	ClassAK                        // Aksara (Indic scripts)
-	ClassAP                        // Aksara Prebase (Indic scripts)
-	ClassAS                        // Aksara Start (Indic scripts)
-	ClassVF                        // Virama Final (Indic scripts)
-	ClassVI                        // Virama (Indic scripts)
-	ClassHH                        // Hebrew Letter for Dictionary-based Breaking
+	// Characters (13-30)
+	ClassAL // Alphabetic
+	ClassHL // Hebrew Letter
+	ClassID // Ideographic
+	ClassIN // Inseparable
+	ClassNU // Numeric
+	ClassPR // Prefix Numeric
+	ClassPO // Postfix Numeric
+	ClassIS // Infix Numeric Separator
+	ClassSY // Symbols Allowing Break After
+	ClassAI // Ambiguous (Alphabetic or Ideographic) - East Asian Width
+	ClassCJ // Conditional Japanese Starter
+	ClassSA // Complex Context Dependent (South East Asian)
+	ClassAK // Aksara (Indic scripts)
+	ClassAP // Aksara Prebase (Indic scripts)
+	ClassAS // Aksara Start (Indic scripts)
+	ClassVF // Virama Final (Indic scripts)
+	ClassVI // Virama (Indic scripts)
+	ClassHH // Hebrew Letter for Dictionary-based Breaking
 
-	// Punctuation
-	ClassOP BreakClass = iota + 40 // Open Punctuation
-	ClassCL                        // Close Punctuation
-	ClassCP                        // Close Parenthesis
-	ClassQU                        // Quotation
-	ClassGL                        // Non-breaking ("Glue")
-	ClassNS                        // Nonstarter
-	ClassEX                        // Exclamation/Interrogation
+	// Punctuation (31-37)
+	ClassOP // Open Punctuation
+	ClassCL // Close Punctuation
+	ClassCP // Close Parenthesis
+	ClassQU // Quotation
+	ClassGL // Non-breaking ("Glue")
+	ClassNS // Nonstarter
+	ClassEX // Exclamation/Interrogation
 
-	// Combining marks
-	ClassCM BreakClass = iota + 60 // Combining Mark
+	// Combining marks (38)
+	ClassCM // Combining Mark
 
-	// Hangul
-	ClassJL BreakClass = iota + 70 // Hangul L Jamo
-	ClassJV                        // Hangul V Jamo
-	ClassJT                        // Hangul T Jamo
-	ClassH2                        // Hangul LV Syllable
-	ClassH3                        // Hangul LVT Syllable
+	// Hangul (39-43)
+	ClassJL // Hangul L Jamo
+	ClassJV // Hangul V Jamo
+	ClassJT // Hangul T Jamo
+	ClassH2 // Hangul LV Syllable
+	ClassH3 // Hangul LVT Syllable
 
-	// Regional indicators
-	ClassRI BreakClass = iota + 80 // Regional Indicator
+	// Regional indicators (44)
+	ClassRI // Regional Indicator
 
-	// Emoji
-	ClassEB BreakClass = iota + 85 // Emoji Base
-	ClassEM                        // Emoji Modifier
+	// Emoji (45-46)
+	ClassEB // Emoji Base
+	ClassEM // Emoji Modifier
 
-	// Surrogates
-	ClassSG BreakClass = iota + 90 // Surrogate
+	// Surrogates (47)
+	ClassSG // Surrogate
 
-	// Unknown
-	ClassXX BreakClass = iota + 100 // Unknown
+	// Unknown (48)
+	ClassXX // Unknown
 
-	// East Asian Width variants (for maximum conformance)
-	// These distinguish characters with East Asian Width property
-	ClassAI_EA BreakClass = iota + 110 // Ambiguous (East Asian context)
-	ClassAL_EA                          // Alphabetic (East Asian context)
-	ClassBA_EA                          // Break After (East Asian context)
-	ClassCL_EA                          // Close Punctuation (East Asian context)
-	ClassCM_EA                          // Combining Mark (East Asian context)
-	ClassEB_EA                          // Emoji Base (East Asian context)
-	ClassEX_EA                          // Exclamation (East Asian context)
-	ClassGL_EA                          // Glue (East Asian context)
-	ClassID_EA                          // Ideographic (East Asian context)
-	ClassIN_EA                          // Inseparable (East Asian context)
-	ClassNS_EA                          // Nonstarter (East Asian context)
-	ClassOP_EA                          // Open Punctuation (East Asian context)
-	ClassPO_EA                          // Postfix Numeric (East Asian context)
-	ClassPR_EA                          // Prefix Numeric (East Asian context)
+	// East Asian Width variants (49-62)
+	ClassAI_EA // Ambiguous (East Asian context)
+	ClassAL_EA // Alphabetic (East Asian context)
+	ClassBA_EA // Break After (East Asian context)
+	ClassCL_EA // Close Punctuation (East Asian context)
+	ClassCM_EA // Combining Mark (East Asian context)
+	ClassEB_EA // Emoji Base (East Asian context)
+	ClassEX_EA // Exclamation (East Asian context)
+	ClassGL_EA // Glue (East Asian context)
+	ClassID_EA // Ideographic (East Asian context)
+	ClassIN_EA // Inseparable (East Asian context)
+	ClassNS_EA // Nonstarter (East Asian context)
+	ClassOP_EA // Open Punctuation (East Asian context)
+	ClassPO_EA // Postfix Numeric (East Asian context)
+	ClassPR_EA // Prefix Numeric (East Asian context)
 
-	// Quotation subclasses
-	ClassQU_Pi BreakClass = iota + 125 // Quotation - Pi (initial punctuation)
-	ClassQU_Pf                          // Quotation - Pf (final punctuation)
+	// Quotation subclasses (63-64)
+	ClassQU_Pi // Quotation - Pi (initial punctuation)
+	ClassQU_Pf // Quotation - Pf (final punctuation)
 )
 
 // BreakAction represents the action to take at a line break opportunity.
@@ -4203,10 +4202,10 @@ var pairTable = map[[2]BreakClass]BreakAction{
 
 // pairTableFlat is a cache-friendly flat array version of pairTable.
 // Populated at init time for O(1) direct indexing without map overhead.
-// Note: BreakClass values are sparse (0-144 with gaps). Could be remapped to dense [64][64]
-// for 4KB total, but current [256][256] is simple and still cache-friendly at 64KB.
-// Size: 256×256 = 65,536 bytes = 64KB (fits in L1/L2 cache)
-var pairTableFlat [256][256]BreakAction
+// BreakClass values are now densely packed (0-64), requiring [65][65] minimum.
+// Using [128][128] for power-of-2 sizing with headroom for future classes.
+// Size: 128×128 = 16,384 bytes = 16KB (fits in L1 cache, 4x smaller than before!)
+var pairTableFlat [128][128]BreakAction
 
 func init() {
 	// Initialize all entries to "not found" sentinel
@@ -4218,7 +4217,13 @@ func init() {
 
 	// Populate flat array from map for fast array-based lookups
 	for key, action := range pairTable {
-		pairTableFlat[key[0]][key[1]] = action
+		before := key[0]
+		after := key[1]
+		// Verify classes fit in [128][128] (max value is 64 after dense packing)
+		if before >= 128 || after >= 128 {
+			panic("BreakClass value exceeds 127, increase pairTableFlat dimensions")
+		}
+		pairTableFlat[before][after] = action
 	}
 }
 
