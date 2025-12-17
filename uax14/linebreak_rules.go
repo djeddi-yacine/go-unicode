@@ -1629,6 +1629,52 @@ var lineBreakRules = []LineBreakRule{
 
 // FindLineBreakOpportunitiesWithRules finds line break opportunities using the rule-based approach.
 // This is an alternative implementation for testing and benchmarking.
+// isSimpleASCIIString checks if a string contains only simple ASCII characters.
+// Uses word-at-a-time processing for speed (SIMD-style without assembly).
+// Simple ASCII: a-z, A-Z, 0-9, space, CR, LF only.
+func isSimpleASCIIString(s string) bool {
+	i := 0
+	n := len(s)
+
+	// Phase 1: Check 8 bytes at a time for high-bit (non-ASCII detection)
+	for i+8 <= n {
+		// Load 8 bytes as uint64 (assumes little-endian, works on most platforms)
+		// Check if any byte has high bit set (>= 128)
+		word := uint64(s[i]) | uint64(s[i+1])<<8 | uint64(s[i+2])<<16 | uint64(s[i+3])<<24 |
+			uint64(s[i+4])<<32 | uint64(s[i+5])<<40 | uint64(s[i+6])<<48 | uint64(s[i+7])<<56
+
+		// If any high bit is set, we have non-ASCII
+		if word&0x8080808080808080 != 0 {
+			return false
+		}
+
+		// Check each byte for validity (must be alphanum, space, CR, or LF)
+		for j := 0; j < 8; j++ {
+			c := s[i+j]
+			if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
+				c == ' ' || c == '\r' || c == '\n') {
+				return false
+			}
+		}
+		i += 8
+	}
+
+	// Phase 2: Check remaining bytes
+	for i < n {
+		c := s[i]
+		if c > 127 {
+			return false
+		}
+		if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
+			c == ' ' || c == '\r' || c == '\n') {
+			return false
+		}
+		i++
+	}
+
+	return true
+}
+
 // findLineBreaksASCII is a fast path for simple ASCII text (alphanum + spaces + newlines only).
 // Much faster than Unicode path: no rune conversion, no class lookups, no rule iteration.
 // Only called for text with no punctuation, tabs, or Unicode.
@@ -1671,24 +1717,10 @@ func FindLineBreakOpportunitiesWithRules(text string, hyphens Hyphens) []int {
 		return []int{0}
 	}
 
-	// Phase 7d: ASCII fast path - check if entire string is simple ASCII
-	// Only use fast path for alphanum + space + newlines (no tabs or punctuation)
-	// Common for variable names, simple English prose
-	isSimpleASCII := true
-	for i := 0; i < len(text); i++ {
-		c := text[i]
-		if c > 127 {
-			isSimpleASCII = false
-			break
-		}
-		// Allow: a-z, A-Z, 0-9, space, CR, LF (NO tabs - they have complex rules)
-		// Reject: any punctuation, tabs, or special chars
-		if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
-			c == ' ' || c == '\r' || c == '\n') {
-			isSimpleASCII = false
-			break
-		}
-	}
+	// Phase 7e: Optimized ASCII detection
+	// Fast path: Check entire string for simple ASCII (alphanum + space + newlines)
+	// Optimization: Check 8 bytes at a time for high-bit check (SIMD-style)
+	isSimpleASCII := isSimpleASCIIString(text)
 	if isSimpleASCII {
 		return findLineBreaksASCII(text)
 	}
