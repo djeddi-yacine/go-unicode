@@ -180,11 +180,26 @@ After all optimizations: **0.8-1.0x** (potentially faster than original!)
 - Phase 3: ✅ 2.35x → 2.3x slower (environment infra: 1.02x improvement)
 - Phase 4: ✅ 2.3x → 2.2x slower (streaming rules: 1.05x improvement)
 - Phase 5: ✅ 2.2x → 2.05x slower (dense enums: 1.07x improvement)
-- **Total: 1.22x cumulative improvement**
+- Phase 7a: ✅ Inline top 6 rules: minimal impact (+1.4% for medium, -4% for short)
+- **Total: 1.22x cumulative improvement (through Phase 5)**
 
-**Current state**: 2.5x slower → **2.05x slower** (short text: 373 ns → 1,180 ns)
+**Current state**: 2.5x slower → **2.05x slower** (short text: 373 ns → 1,229 ns)
 
-**Remaining gap**: Rule iteration overhead is the primary bottleneck (~60% of cost)
+**Phase 7 Analysis (Rule Iteration Bottleneck)**:
+
+Profiled 19,338 conformance tests (41,149 positions):
+- **Pair table matches: 83.76%** (checked LAST!)
+- **Average: 38.5 rule checks per position**
+- **Top rule hit rate: 5.72%** (LB13)
+- **Top 3 rules: only 9%** of matches
+
+**Key insight**: We check ~38 rules that don't match before hitting pair table (84% of cases).
+
+**Phase 7a (Inline top rules)**: Saved 6 function calls but minimal impact because still checking 32+ rules on average. Virtual function call overhead was NOT the bottleneck.
+
+**Phase 7b (ASCII fast-path)**: Attempted but reverted due to complex state transition edge cases with Unicode/ASCII boundaries.
+
+**Next**: Phase 7c (two-tier: critical rules → pair table → remaining rules)
 
 ## Benchmarking Commands
 
