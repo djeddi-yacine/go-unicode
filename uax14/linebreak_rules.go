@@ -1673,11 +1673,65 @@ func FindLineBreakOpportunitiesWithRules(text string, hyphens Hyphens) []int {
 		decision := BreakNo
 		ruleMatched := false
 
-		for _, rule := range lineBreakRules {
-			if matched, ruleDecision := rule(ctx); matched {
+		// Phase 7a: Inline top mandatory/zero-width rules (no function pointer overhead)
+		// These are checked on nearly every position, so avoiding function calls helps
+
+		// LB4: Always break after BK
+		if prevClass == ClassBK {
+			decision = BreakYes
+			ruleMatched = true
+		}
+
+		// LB5a: CR × LF (never break between CR and LF)
+		if !ruleMatched && prevClass == ClassCR && currClass == ClassLF {
+			decision = BreakNo
+			ruleMatched = true
+		}
+
+		// LB5b: Always break after CR, LF, NL
+		if !ruleMatched && (prevClass == ClassCR || prevClass == ClassLF || prevClass == ClassNL) {
+			decision = BreakYes
+			ruleMatched = true
+		}
+
+		// LB7: × ZW (don't break before zero-width space)
+		if !ruleMatched && currClass == ClassZW {
+			decision = BreakNo
+			ruleMatched = true
+		}
+
+		// LB8a: ZWJ × (don't break after zero-width joiner)
+		// Note: Check actual rune, not class, because LB10 might have converted it
+		if !ruleMatched && i > 0 && runes[i-1] == '\u200D' {
+			decision = BreakNo
+			ruleMatched = true
+		}
+
+		// LB8 (index 5): ZW SP* ÷ - complex rule, must come BEFORE LB11
+		if !ruleMatched {
+			if matched, ruleDecision := lineBreakRules[5](ctx); matched {
 				decision = ruleDecision
 				ruleMatched = true
-				break
+			}
+		}
+
+		// LB11: WJ × and × WJ (word joiner prevents breaks)
+		if !ruleMatched && (prevClass == ClassWJ || currClass == ClassWJ) {
+			decision = BreakNo
+			ruleMatched = true
+		}
+
+		// If no fast-path rule matched, check remaining rules via function pointers
+		if !ruleMatched {
+			// We've inlined: LB4(0), LB5a(1), LB5b(2), LB7(3), LB8a(4), LB8(5), LB11(6)
+			// Check remaining rules starting from index 7 (LB12)
+			for i := 7; i < len(lineBreakRules); i++ {
+				rule := lineBreakRules[i]
+				if matched, ruleDecision := rule(ctx); matched {
+					decision = ruleDecision
+					ruleMatched = true
+					break
+				}
 			}
 		}
 
