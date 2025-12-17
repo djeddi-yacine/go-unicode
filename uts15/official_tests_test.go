@@ -59,49 +59,37 @@ func TestOfficialNormalization(t *testing.T) {
 
 		// Test NFC invariants
 		// c2 == toNFC(c1) == toNFC(c2) == toNFC(c3)
-		if !testEqual(c2, NFC(c1), "NFC(c1)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c2, NFC(c2), "NFC(c2)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c2, NFC(c3), "NFC(c3)", lineNum, &failCount, &firstFailures) {
-			// Failure recorded
-		}
+		testEqual(c2, NFC(c1), "NFC(c1)", lineNum, &failCount, &firstFailures)
+		testEqual(c2, NFC(c2), "NFC(c2)", lineNum, &failCount, &firstFailures)
+		testEqual(c2, NFC(c3), "NFC(c3)", lineNum, &failCount, &firstFailures)
 		// c4 == toNFC(c4) == toNFC(c5)
-		if !testEqual(c4, NFC(c4), "NFC(c4)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c4, NFC(c5), "NFC(c5)", lineNum, &failCount, &firstFailures) {
-			// Failure recorded
-		}
+		testEqual(c4, NFC(c4), "NFC(c4)", lineNum, &failCount, &firstFailures)
+		testEqual(c4, NFC(c5), "NFC(c5)", lineNum, &failCount, &firstFailures)
 
 		// Test NFD invariants
 		// c3 == toNFD(c1) == toNFD(c2) == toNFD(c3)
-		if !testEqual(c3, NFD(c1), "NFD(c1)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c3, NFD(c2), "NFD(c2)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c3, NFD(c3), "NFD(c3)", lineNum, &failCount, &firstFailures) {
-			// Failure recorded
-		}
+		testEqual(c3, NFD(c1), "NFD(c1)", lineNum, &failCount, &firstFailures)
+		testEqual(c3, NFD(c2), "NFD(c2)", lineNum, &failCount, &firstFailures)
+		testEqual(c3, NFD(c3), "NFD(c3)", lineNum, &failCount, &firstFailures)
 		// c5 == toNFD(c4) == toNFD(c5)
-		if !testEqual(c5, NFD(c4), "NFD(c4)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c5, NFD(c5), "NFD(c5)", lineNum, &failCount, &firstFailures) {
-			// Failure recorded
-		}
+		testEqual(c5, NFD(c4), "NFD(c4)", lineNum, &failCount, &firstFailures)
+		testEqual(c5, NFD(c5), "NFD(c5)", lineNum, &failCount, &firstFailures)
 
 		// Test NFKC invariants
 		// c4 == toNFKC(c1) == toNFKC(c2) == toNFKC(c3) == toNFKC(c4) == toNFKC(c5)
-		if !testEqual(c4, NFKC(c1), "NFKC(c1)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c4, NFKC(c2), "NFKC(c2)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c4, NFKC(c3), "NFKC(c3)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c4, NFKC(c4), "NFKC(c4)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c4, NFKC(c5), "NFKC(c5)", lineNum, &failCount, &firstFailures) {
-			// Failure recorded
-		}
+		testEqual(c4, NFKC(c1), "NFKC(c1)", lineNum, &failCount, &firstFailures)
+		testEqual(c4, NFKC(c2), "NFKC(c2)", lineNum, &failCount, &firstFailures)
+		testEqual(c4, NFKC(c3), "NFKC(c3)", lineNum, &failCount, &firstFailures)
+		testEqual(c4, NFKC(c4), "NFKC(c4)", lineNum, &failCount, &firstFailures)
+		testEqual(c4, NFKC(c5), "NFKC(c5)", lineNum, &failCount, &firstFailures)
 
 		// Test NFKD invariants
 		// c5 == toNFKD(c1) == toNFKD(c2) == toNFKD(c3) == toNFKD(c4) == toNFKD(c5)
-		if !testEqual(c5, NFKD(c1), "NFKD(c1)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c5, NFKD(c2), "NFKD(c2)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c5, NFKD(c3), "NFKD(c3)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c5, NFKD(c4), "NFKD(c4)", lineNum, &failCount, &firstFailures) ||
-			!testEqual(c5, NFKD(c5), "NFKD(c5)", lineNum, &failCount, &firstFailures) {
-			// Failure recorded
-		}
+		testEqual(c5, NFKD(c1), "NFKD(c1)", lineNum, &failCount, &firstFailures)
+		testEqual(c5, NFKD(c2), "NFKD(c2)", lineNum, &failCount, &firstFailures)
+		testEqual(c5, NFKD(c3), "NFKD(c3)", lineNum, &failCount, &firstFailures)
+		testEqual(c5, NFKD(c4), "NFKD(c4)", lineNum, &failCount, &firstFailures)
+		testEqual(c5, NFKD(c5), "NFKD(c5)", lineNum, &failCount, &firstFailures)
 	}
 
 	if err := scanner.Err(); err != nil {
