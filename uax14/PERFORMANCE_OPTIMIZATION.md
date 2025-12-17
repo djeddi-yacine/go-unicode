@@ -199,7 +199,15 @@ Profiled 19,338 conformance tests (41,149 positions):
 
 **Phase 7b (ASCII fast-path)**: Attempted but reverted due to complex state transition edge cases with Unicode/ASCII boundaries.
 
-**Next**: Phase 7c (two-tier: critical rules → pair table → remaining rules)
+**Phase 7c (Two-tier: pair table first)**: Attempted but reverted (399/19,338 failures).
+- Tried: Check Tier 1 → pair table → Tier 2 rules
+- Failed: Many Tier 2 rules override pair table for specific contexts
+- Architecture is correct: rules are exceptions (16%), pair table is default fallback (84%)
+- Rules MUST be checked before pair table to maintain correctness
+
+**Conclusion**: Rule iteration overhead (~60% of cost) is the price of maintainability.
+The 1.22x improvement achieved (2.5x → 2.05x slower) is good progress.
+Remaining 2x gap is the architectural cost of rule-based clarity vs inline state machine.
 
 ## Benchmarking Commands
 
