@@ -333,6 +333,74 @@ if uts15.IsNFC("café") {
 }
 ```
 
+### [uts39](./uts39) - Unicode Security Mechanisms
+
+Implementation of UTS #39 (Unicode Security Mechanisms) for detecting and preventing security issues from confusable characters and mixed scripts.
+
+**Status:** Complete with 100% conformance (6,565/6,565 confusable mappings verified)
+
+Supports:
+- **Confusable detection** - Skeleton algorithm for visual similarity
+  - Identifies lookalike characters (e.g., Cyrillic 'а' vs Latin 'a')
+  - Case-insensitive confusable matching
+  - 6,565 confusable mappings from Unicode 17.0.0
+- **Mixed-script detection** - Identifies suspicious script mixing
+  - Single-script, mixed-script, and cross-script analysis
+  - Script-specific security policies
+- **Restriction levels** - Security profiles for identifiers
+  - ASCII-Only: Strictest, ASCII characters only
+  - Single-Script: One script (excluding Common/Inherited)
+  - Highly-Restrictive: Single script + Common + Inherited
+  - Moderately-Restrictive: Multiple allowed script combinations
+  - Minimally-Restrictive: Latin + one other script
+  - Unrestricted: Any character combination
+- **Safe identifier validation** - Checks for security issues
+  - Invalid invisible characters
+  - Proper identifier structure (UAX #31)
+  - Minimum restriction level enforcement
+
+```go
+import "github.com/SCKelemen/unicode/uts39"
+
+// Detect confusable strings (homograph attacks)
+if uts39.AreConfusable("paypal", "pаypal") {  // Second uses Cyrillic 'а'
+    // Warning: visually similar but different strings
+}
+
+// Get skeleton for comparison
+skel := uts39.Skeleton("Hello")
+
+// Check restriction level
+level := uts39.GetRestrictionLevel("user_name")
+if level >= uts39.HighlyRestrictive {
+    // Identifier meets security requirements
+}
+
+// Detect mixed scripts
+if uts39.IsMixedScript("hello мир") {  // Latin + Cyrillic
+    // Warning: mixed script identifier
+}
+
+// Validate identifier safety
+if uts39.IsSafeIdentifier("user_name") {
+    // Safe: valid identifier, highly restrictive, no invisible chars
+}
+
+// Security validation example
+func validateUsername(username string) error {
+    if !uts39.IsValidIdentifier(username) {
+        return errors.New("invalid identifier format")
+    }
+
+    level := uts39.GetRestrictionLevel(username)
+    if level < uts39.HighlyRestrictive {
+        return errors.New("username uses suspicious character mixing")
+    }
+
+    return nil
+}
+```
+
 ## Installation
 
 ```bash
@@ -344,6 +412,7 @@ go get github.com/SCKelemen/unicode/uax29
 go get github.com/SCKelemen/unicode/uax31
 go get github.com/SCKelemen/unicode/uax50
 go get github.com/SCKelemen/unicode/uts15
+go get github.com/SCKelemen/unicode/uts39
 go get github.com/SCKelemen/unicode/uts51
 ```
 
@@ -560,6 +629,11 @@ All implementations follow the Unicode Standard and are tested against official 
   - Hangul composition and decomposition
   - Canonical ordering of combining marks
   - Normalization stability verification
+- **UTS #39 (Unicode Security Mechanisms)**: 100% conformance (6,565/6,565 confusable mappings)
+  - Confusable character detection via skeleton algorithm
+  - Mixed-script detection and validation
+  - Restriction levels for identifier security
+  - Safe identifier validation
 - **UTS #51 (Unicode Emoji)**: 100% conformance (5,223/5,223 tests)
   - All 6 emoji properties correctly implemented
   - Complete sequence validation (ZWJ, modifier, flag, keycap, tag sequences)
@@ -574,6 +648,7 @@ Implementations are validated using the official Unicode Character Database (UCD
 - [UAX #31 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `DerivedCoreProperties.txt` (297,981 tests)
 - [UAX #50 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `VerticalOrientation.txt` property data
 - [UTS #15 Test Files](https://www.unicode.org/Public/17.0.0/ucd/) - `NormalizationTest.txt` (20,034 tests)
+- [UTS #39 Data Files](https://www.unicode.org/Public/security/latest/) - `confusables.txt` (6,565 confusable mappings)
 - [UTS #51 Test Files](https://www.unicode.org/Public/emoji/17.0/) - `emoji-test.txt` with 5,223 test cases
 - [Unicode Character Database](https://www.unicode.org/Public/17.0.0/ucd/) - Character property data files
 
