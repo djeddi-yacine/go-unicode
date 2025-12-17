@@ -244,23 +244,35 @@ func canonicalOrder(runes []rune) []rune {
 		return runes
 	}
 
-	// Bubble sort for canonical ordering (stable and simple)
-	// We need to preserve the order of combining marks with the same class
-	for {
-		changed := false
-		for i := 0; i < len(runes)-1; i++ {
-			class1 := getCombiningClass(runes[i])
-			class2 := getCombiningClass(runes[i+1])
+	// Insertion sort for canonical ordering (stable and efficient)
+	// More efficient than bubble sort: O(n) for nearly-sorted data, O(n²) worst case
+	// We need to preserve the order of combining marks with the same class (stable sort)
+	for i := 1; i < len(runes); i++ {
+		currentRune := runes[i]
+		currentClass := getCombiningClass(currentRune)
 
-			// Only reorder if both are combining marks and in wrong order
-			if class1 > 0 && class2 > 0 && class1 > class2 {
-				runes[i], runes[i+1] = runes[i+1], runes[i]
-				changed = true
+		// Only process combining marks (class > 0)
+		if currentClass == 0 {
+			continue
+		}
+
+		// Find insertion position by moving backwards
+		j := i - 1
+		for j >= 0 {
+			prevClass := getCombiningClass(runes[j])
+
+			// Stop if we hit a non-combining character or a smaller/equal class
+			if prevClass == 0 || prevClass <= currentClass {
+				break
 			}
+
+			// Shift right
+			runes[j+1] = runes[j]
+			j--
 		}
-		if !changed {
-			break
-		}
+
+		// Insert at correct position
+		runes[j+1] = currentRune
 	}
 
 	return runes

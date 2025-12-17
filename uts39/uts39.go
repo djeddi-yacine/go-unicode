@@ -120,23 +120,25 @@ func (l RestrictionLevel) String() string {
 //
 // See: https://www.unicode.org/reports/tr39/#Confusable_Detection
 func Skeleton(s string) string {
-	// Step 1: Apply NFKD normalization
+	// Step 1: Apply NFKD normalization and confusable mappings
 	s = uts15.NFKD(s)
-
-	// Step 2: Apply confusable mappings
 	s = applyConfusables(s)
 
-	// Step 3: Apply case folding (convert to lowercase)
+	// Step 2: Apply case folding (convert to lowercase)
 	s = strings.ToLower(s)
 
-	// Step 4: Apply NFD normalization
-	s = uts15.NFD(s)
+	// Step 3: Apply NFD normalization and confusable mappings until fixed point
+	// Most strings reach fixed point in 1-2 iterations
+	for i := 0; i < 3; i++ { // Limit iterations to prevent infinite loops
+		prev := s
+		s = uts15.NFD(s)
+		s = applyConfusables(s)
 
-	// Step 5: Apply confusable mappings again
-	s = applyConfusables(s)
-
-	// Step 6: Apply NFD again
-	s = uts15.NFD(s)
+		// Stop if we've reached a fixed point
+		if s == prev {
+			break
+		}
+	}
 
 	return s
 }
@@ -357,10 +359,10 @@ func IsSafeIdentifier(s string) bool {
 }
 
 // isInvisible reports whether a rune is invisible (zero-width, formatting, etc.)
+// Optimized with switch statement for O(1) lookup instead of O(n) linear search
 func isInvisible(r rune) bool {
-	// Common invisible characters
-	invisibleRunes := []rune{
-		0x200B, // Zero Width Space
+	switch r {
+	case 0x200B, // Zero Width Space
 		0x200C, // Zero Width Non-Joiner
 		0x200D, // Zero Width Joiner
 		0x200E, // Left-To-Right Mark
@@ -370,14 +372,9 @@ func isInvisible(r rune) bool {
 		0x202B, // Right-To-Left Embedding
 		0x202C, // Pop Directional Formatting
 		0x202D, // Left-To-Right Override
-		0x202E, // Right-To-Left Override
+		0x202E: // Right-To-Left Override
+		return true
+	default:
+		return false
 	}
-
-	for _, invisible := range invisibleRunes {
-		if r == invisible {
-			return true
-		}
-	}
-
-	return false
 }
