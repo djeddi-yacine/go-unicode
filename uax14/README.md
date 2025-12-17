@@ -113,6 +113,29 @@ See [example_test.go](./example_test.go) for more usage examples, including:
 - CJK text processing
 - Line wrapping algorithms
 
+## Performance
+
+The implementation uses a rule-based architecture (v5.x) with extensive optimizations:
+
+### ASCII Fast Path (Phase 7d)
+- **Simple ASCII text**: **10x faster than original implementation!** (~42ns for short strings)
+- Applies to: alphanumeric characters, spaces, CR, LF (no punctuation or tabs)
+- Use case: Variable names, identifiers, simple English prose
+- **30-40x speedup** over Unicode path for qualifying text
+
+### Unicode Text
+- **1.28x faster** than baseline rule-based implementation (through Phase 9)
+- **1.95x slower** than original inline state machine for complex Unicode
+- Trade-off: Maintainability and correctness over raw performance
+- Full UAX #14 compliance: **100% conformance** (19,338/19,338 official tests)
+
+### Optimizations Applied
+- **Phase 1-5**: Bitpacking, flat arrays, streaming parser, dense enums (1.22x)
+- **Phase 7d**: ASCII fast path with SIMD-style detection (30-40x for ASCII)
+- **Phase 9**: Hybrid dispatch - pair table first for 82.59% of cases (1.05x)
+
+See [PERFORMANCE_OPTIMIZATION.md](./PERFORMANCE_OPTIMIZATION.md) for detailed optimization history.
+
 ## Testing
 
 ```bash
