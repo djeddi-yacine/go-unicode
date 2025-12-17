@@ -8,6 +8,41 @@ func isCombiningMark(r rune) bool {
 	return unicode.Is(unicode.Mn, r) || unicode.Is(unicode.Mc, r)
 }
 
+// QuoteContext tracks an opening quote for pairing.
+type QuoteContext struct {
+	pos   int16      // Position of opening quote (int16 saves memory, supports texts up to 32K runes)
+	class BreakClass // ClassOP or ClassQU_Pf
+	rune  rune       // Actual quote character
+}
+
+// LineBreakEnvironment tracks context state during forward pass.
+// Eliminates backward scanning by maintaining state as we scan left-to-right.
+// Pre-allocated at context creation, zero heap allocations during scanning.
+type LineBreakEnvironment struct {
+	// Quote tracking for LB19 (German quotes „..."）
+	quoteStack [8]QuoteContext // Stack of opening quotes (max 8 nesting levels)
+	quoteTop   uint8           // Stack pointer (0 = empty)
+
+	// Regional Indicator tracking for LB30a
+	riCount    uint8 // Count of consecutive RIs seen
+	riStartPos int16 // Position where RI sequence started
+
+	// Hebrew hyphen tracking for LB21a
+	lastHLPos int16 // Position of last HL (Hebrew Letter), -1 if none
+
+	// Bracket/parenthesis depth tracking
+	parenDepth   uint8 // Nesting depth for balanced parentheses
+	bracketDepth uint8 // Nesting depth for balanced brackets
+
+	// Indic script state for Aksara rules (LB25, LB26, LB27)
+	inAksaraSequence bool
+	aksaraStartPos   int16
+
+	// Space tracking for LB18
+	lastNonSpacePos   int16      // Position of last non-SP character
+	lastNonSpaceClass BreakClass // Class of last non-SP character
+}
+
 // LineBreakContext manages state for line break opportunity detection.
 // It provides a clean abstraction over the text and classification data,
 // making rule implementation straightforward and maintainable.
@@ -31,6 +66,9 @@ type LineBreakContext struct {
 
 	// Byte position tracking for output
 	bytePositions []int
+
+	// Environment for streaming parser (forward-only, zero backward scanning)
+	env LineBreakEnvironment
 }
 
 // NewLineBreakContext creates a context for line break opportunity detection.
@@ -82,6 +120,12 @@ func NewLineBreakContext(text string, hyphens Hyphens) *LineBreakContext {
 	}
 	ctx.lastNonSpaceClass = ctx.prevClass
 
+	// Initialize environment for streaming parser
+	ctx.env.lastHLPos = -1
+	ctx.env.lastNonSpacePos = 0
+	ctx.env.lastNonSpaceClass = ctx.prevClass
+	ctx.env.riStartPos = -1
+
 	return ctx
 }
 
@@ -93,6 +137,7 @@ func (c *LineBreakContext) Slide() bool {
 		return false
 	}
 	c.updateCache()
+	c.updateEnvironment()
 	return true
 }
 
@@ -122,6 +167,78 @@ func (c *LineBreakContext) updateCache() {
 		c.nextClass = c.classes[c.pos+1]
 	} else {
 		c.nextClass = ClassAL
+	}
+}
+
+// updateEnvironment updates the environment state for the current position.
+// Called after updateCache() during Slide() to maintain forward-only state.
+func (c *LineBreakContext) updateEnvironment() {
+	curr := c.currClass
+	pos16 := int16(c.pos)
+
+	// Update last non-space position
+	if curr != ClassSP {
+		c.env.lastNonSpacePos = pos16
+		c.env.lastNonSpaceClass = curr
+	}
+
+	// Track Hebrew letters for LB21a
+	if curr == ClassHL {
+		c.env.lastHLPos = pos16
+	}
+
+	// Track Regional Indicators for LB30a
+	// LB9: Treat X (CM | ZWJ)* as if it were X - skip CM/ZWJ when counting RIs
+	if curr == ClassRI {
+		if c.env.riCount == 0 {
+			c.env.riStartPos = pos16
+		}
+		c.env.riCount++
+	} else if !isClassOrVariant(curr, ClassCM) && curr != ClassZWJ {
+		// Reset RI count when we hit non-RI (but skip CM/ZWJ per LB9)
+		c.env.riCount = 0
+		c.env.riStartPos = -1
+	}
+
+	// Track opening quotes for LB19 (German quotes)
+	if curr == ClassOP {
+		// Push opening quote to stack
+		if c.env.quoteTop < 8 {
+			c.env.quoteStack[c.env.quoteTop] = QuoteContext{
+				pos:   pos16,
+				class: curr,
+				rune:  c.runes[c.pos],
+			}
+			c.env.quoteTop++
+		}
+	}
+
+	// Track closing quotes for LB19
+	if curr == ClassQU_Pi {
+		// Pop matching opening quote from stack
+		if c.env.quoteTop > 0 {
+			c.env.quoteTop--
+		}
+	}
+
+	// Track parenthesis depth
+	if curr == ClassOP {
+		c.env.parenDepth++
+	} else if curr == ClassCP {
+		if c.env.parenDepth > 0 {
+			c.env.parenDepth--
+		}
+	}
+
+	// Track Aksara sequences for Indic scripts
+	if curr == ClassAK || curr == ClassAS {
+		if !c.env.inAksaraSequence {
+			c.env.inAksaraSequence = true
+			c.env.aksaraStartPos = pos16
+		}
+	} else if curr == ClassVF {
+		// Virama Final ends Aksara sequence
+		c.env.inAksaraSequence = false
 	}
 }
 
@@ -159,6 +276,13 @@ func (c *LineBreakContext) Curr() BreakClass {
 //go:inline
 func (c *LineBreakContext) Next() BreakClass {
 	return c.nextClass
+}
+
+// Env returns a pointer to the environment for streaming parser state access.
+//
+//go:inline
+func (c *LineBreakContext) Env() *LineBreakEnvironment {
+	return &c.env
 }
 
 // Rune returns the rune at the current position.
