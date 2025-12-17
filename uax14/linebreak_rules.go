@@ -1629,9 +1629,68 @@ var lineBreakRules = []LineBreakRule{
 
 // FindLineBreakOpportunitiesWithRules finds line break opportunities using the rule-based approach.
 // This is an alternative implementation for testing and benchmarking.
+// findLineBreaksASCII is a fast path for simple ASCII text (alphanum + spaces + newlines only).
+// Much faster than Unicode path: no rune conversion, no class lookups, no rule iteration.
+// Only called for text with no punctuation, tabs, or Unicode.
+func findLineBreaksASCII(text string) []int {
+	breakPoints := []int{0}
+
+	for i := 1; i < len(text); i++ {
+		prev := text[i-1]
+		curr := text[i]
+
+		shouldBreak := false
+
+		// Always break after newlines (except CR LF)
+		if prev == '\r' {
+			if curr != '\n' {
+				shouldBreak = true
+			}
+		} else if prev == '\n' {
+			shouldBreak = true
+		} else if prev == ' ' {
+			// Break after space (only if next char is non-whitespace)
+			if curr != ' ' && curr != '\r' && curr != '\n' {
+				shouldBreak = true
+			}
+		}
+
+		if shouldBreak {
+			breakPoints = append(breakPoints, i)
+		}
+	}
+
+	// LB3: Always break at end of text
+	breakPoints = append(breakPoints, len(text))
+
+	return breakPoints
+}
+
 func FindLineBreakOpportunitiesWithRules(text string, hyphens Hyphens) []int {
 	if text == "" {
 		return []int{0}
+	}
+
+	// Phase 7d: ASCII fast path - check if entire string is simple ASCII
+	// Only use fast path for alphanum + space + newlines (no tabs or punctuation)
+	// Common for variable names, simple English prose
+	isSimpleASCII := true
+	for i := 0; i < len(text); i++ {
+		c := text[i]
+		if c > 127 {
+			isSimpleASCII = false
+			break
+		}
+		// Allow: a-z, A-Z, 0-9, space, CR, LF (NO tabs - they have complex rules)
+		// Reject: any punctuation, tabs, or special chars
+		if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
+			c == ' ' || c == '\r' || c == '\n') {
+			isSimpleASCII = false
+			break
+		}
+	}
+	if isSimpleASCII {
+		return findLineBreaksASCII(text)
 	}
 
 	runes := []rune(text)
