@@ -700,23 +700,6 @@ func ruleLB19_SP_QU_Pf(ctx *LineBreakContext) (bool, BreakDecision) {
 	return true, BreakNo
 }
 
-// ruleLB19_QU_Pf_SP implements: QU_Pf SP ÷
-// Allow break after closing quote followed by space before certain classes (like B2 em-dash).
-// This ensures LB18 (SP ÷) applies after closing quotes in appropriate contexts.
-// https://www.unicode.org/reports/tr14/#LB19
-func ruleLB19_QU_Pf_SP(ctx *LineBreakContext) (bool, BreakDecision) {
-	prev := ctx.Prev()
-	lastNonSpace := ctx.LastNonSpace()
-
-	// Pattern: QU_Pf SP ÷ (break after space following closing quote)
-	if prev != ClassSP || !isClassOrVariant(lastNonSpace, ClassQU_Pf) {
-		return false, BreakNo
-	}
-
-	// Only apply in specific contexts where LB18 should apply
-	// This handles patterns like "?» — " where we want to break before the em-dash
-	return false, BreakNo
-}
 
 // ruleLB11 implements: WJ ×, × WJ
 // Do not break before or after word joiner.
@@ -901,40 +884,6 @@ func ruleLB17(ctx *LineBreakContext) (bool, BreakDecision) {
 	return false, BreakNo
 }
 
-// ruleLB18 implements: SP ÷
-// Break after spaces (but see other rules for exceptions).
-// Exception: Don't break between spaces that follow ZW (LB8 interaction).
-// Exception: Don't break SP × SP (handled by pair table as BreakProhibited).
-// https://www.unicode.org/reports/tr14/#LB18
-func ruleLB18(ctx *LineBreakContext) (bool, BreakDecision) {
-	prev := ctx.Prev()
-	curr := ctx.Curr()
-	lastNonSpace := ctx.LastNonSpace()
-
-	if prev != ClassSP {
-		return false, BreakNo
-	}
-
-	// Don't break before certain classes (these are handled by other rules)
-	// LB6, LB7, LB11, LB13 take precedence
-	if curr == ClassBK || curr == ClassCR || curr == ClassLF || curr == ClassNL ||
-	   curr == ClassZW || curr == ClassWJ {
-		return false, BreakNo
-	}
-
-	// Don't break SP × SP (pair table handles this as BreakProhibited)
-	if curr == ClassSP {
-		// Exception: After ZW, spaces should not break between themselves
-		if lastNonSpace == ClassZW {
-			return true, BreakNo
-		}
-		// Otherwise, don't break between consecutive spaces
-		return false, BreakNo
-	}
-
-	// Allow break after space before non-space characters
-	return true, BreakYes
-}
 
 // ruleLB20 implements: CB ÷ (except before certain classes)
 // Break after contingent break opportunity.
