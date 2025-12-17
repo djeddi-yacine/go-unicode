@@ -20,8 +20,10 @@ type QuoteContext struct {
 // Pre-allocated at context creation, zero heap allocations during scanning.
 type LineBreakEnvironment struct {
 	// Quote tracking for LB19 (German quotes „..."）
-	quoteStack [8]QuoteContext // Stack of opening quotes (max 8 nesting levels)
-	quoteTop   uint8           // Stack pointer (0 = empty)
+	quoteStack       [8]QuoteContext // Stack of opening quotes (max 8 nesting levels)
+	quoteTop         uint8           // Stack pointer (0 = empty)
+	lastClosedQuote  int16           // Position of last closed German quote (-1 if none)
+	lastClosedIsGerman bool          // Was the last closed quote a German quote?
 
 	// Regional Indicator tracking for LB30a
 	riCount    uint8 // Count of consecutive RIs seen
@@ -125,6 +127,10 @@ func NewLineBreakContext(text string, hyphens Hyphens) *LineBreakContext {
 	ctx.env.lastNonSpacePos = 0
 	ctx.env.lastNonSpaceClass = ctx.prevClass
 	ctx.env.riStartPos = -1
+	ctx.env.lastClosedQuote = -1
+
+	// Update environment for position 0
+	ctx.updateEnvironment()
 
 	return ctx
 }
@@ -201,23 +207,37 @@ func (c *LineBreakContext) updateEnvironment() {
 	}
 
 	// Track opening quotes for LB19 (German quotes)
+	// German opening quotes: U+201E („) and U+201A (‚) are ClassOP
 	if curr == ClassOP {
-		// Push opening quote to stack
-		if c.env.quoteTop < 8 {
-			c.env.quoteStack[c.env.quoteTop] = QuoteContext{
-				pos:   pos16,
-				class: curr,
-				rune:  c.runes[c.pos],
+		r := c.runes[c.pos]
+		if r == '\u201E' || r == '\u201A' {
+			// Push German opening quote to stack
+			if c.env.quoteTop < 8 {
+				c.env.quoteStack[c.env.quoteTop] = QuoteContext{
+					pos:   pos16,
+					class: curr,
+					rune:  r,
+				}
+				c.env.quoteTop++
 			}
-			c.env.quoteTop++
 		}
 	}
 
-	// Track closing quotes for LB19
+	// Track closing quotes for LB19 (German quotes)
+	// German closing quotes: U+201C (") and U+2018 (') are ClassQU_Pi
 	if curr == ClassQU_Pi {
-		// Pop matching opening quote from stack
-		if c.env.quoteTop > 0 {
-			c.env.quoteTop--
+		r := c.runes[c.pos]
+		if r == '\u201C' || r == '\u2018' {
+			// Pop matching German opening quote from stack
+			if c.env.quoteTop > 0 {
+				// Check if there's a matching German opening quote
+				top := c.env.quoteStack[c.env.quoteTop-1]
+				if top.rune == '\u201E' || top.rune == '\u201A' {
+					c.env.quoteTop--
+					c.env.lastClosedQuote = pos16
+					c.env.lastClosedIsGerman = true
+				}
+			}
 		}
 	}
 

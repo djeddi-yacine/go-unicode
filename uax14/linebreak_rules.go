@@ -476,14 +476,12 @@ func ruleLB19_German(ctx *LineBreakContext) (bool, BreakDecision) {
 		return false, BreakNo
 	}
 
-	// Look further back to find German opening quote (U+201E or U+201A, which are ClassOP)
-	for checkIdx := pos - 3; checkIdx >= 0 && checkIdx > pos-30; checkIdx-- {
-		checkRune := ctx.RuneAt(checkIdx)
-		checkClass := ctx.ClassAt(checkIdx)
-		if (checkRune == '\u201E' || checkRune == '\u201A') && isClassOrVariant(checkClass, ClassOP) {
-			// Found German opening quote (ClassOP), so the closing quote allows break
-			return true, BreakYes
-		}
+	// Use environment to check if we recently closed a German quote pair (forward-only, no backward scanning)
+	// The closing quote at beforeSpaceIdx should have been tracked in the environment
+	env := ctx.Env()
+	if env.lastClosedIsGerman && env.lastClosedQuote == int16(beforeSpaceIdx) {
+		// Just closed a German quote, allow break after quote + space
+		return true, BreakYes
 	}
 
 	return false, BreakNo
@@ -1396,38 +1394,24 @@ func ruleLB30(ctx *LineBreakContext) (bool, BreakDecision) {
 func ruleLB30a(ctx *LineBreakContext) (bool, BreakDecision) {
 	prev := ctx.Prev()
 	curr := ctx.Curr()
-	pos := ctx.Pos()
 
 	if prev != ClassRI || curr != ClassRI {
 		return false, BreakNo
 	}
 
-	// Count RIs before current position, skipping over CM/ZWJ per LB9
-	// LB9: Treat X (CM | ZWJ)* as if it were X
-	riCount := 0
-	checkIdx := pos - 1
-	for checkIdx >= 0 {
-		checkClass := ctx.ClassAt(checkIdx)
-		// Skip over CM/ZWJ to find actual base characters
-		if isClassOrVariant(checkClass, ClassCM) || checkClass == ClassZWJ {
-			checkIdx--
-			continue
-		}
-		// Stop when we hit a non-RI
-		if checkClass != ClassRI {
-			break
-		}
-		riCount++
-		checkIdx--
-	}
+	// Use environment to check RI count (forward-only, no backward scanning)
+	// env.riCount includes RIs from start up to and including current position
+	// We need to check RIs BEFORE current position to see if current RI pairs
+	env := ctx.Env()
+	risBefore := env.riCount - 1 // Subtract current RI
 
-	// If odd number of RIs before, this forms a pair - don't break
+	// If odd number of RIs before current, this forms a pair - don't break
 	// If even number, allow break (start of new pair)
-	if riCount%2 == 1 {
+	if risBefore%2 == 1 {
 		return true, BreakNo
 	}
 
-	// Even number of RIs - allow break between pairs
+	// Even number of RIs before - allow break between pairs
 	return true, BreakYes
 }
 
