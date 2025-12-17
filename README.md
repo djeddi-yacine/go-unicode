@@ -85,6 +85,43 @@ text := "Hello world! This is a test."
 breaks := uax14.FindLineBreakOpportunities(text, uax14.HyphensManual)
 ```
 
+### [uax24](./uax24) - Script Property
+
+Implementation of UAX #24 (Unicode Script Property) for identifying the writing system (script) to which a character belongs.
+
+**Status:** Complete with 100% conformance (159,866/159,866 tests passing)
+
+Supports:
+- Script property lookup for all Unicode 17.0.0 characters
+- 174 scripts including Latin, Greek, Cyrillic, Han, Arabic, Hebrew, and many others
+- Mixed-script detection for security validation
+- Common and Inherited script handling
+- Single-script string validation
+
+```go
+import "github.com/SCKelemen/unicode/uax24"
+
+// Get the script of a character
+script := uax24.LookupScript('A')      // Returns ScriptLatin
+script = uax24.LookupScript('中')      // Returns ScriptHan
+script = uax24.LookupScript('5')       // Returns ScriptCommon
+
+// Check if character belongs to a specific script
+if uax24.IsLatin('A') {
+    // Character is Latin
+}
+
+// Analyze a string for script composition
+info := uax24.AnalyzeScripts("Hello мир")
+fmt.Printf("Scripts: %v\n", info.Scripts)        // [Latin Cyrillic]
+fmt.Printf("Mixed: %v\n", info.IsMixedScript)    // true
+
+// Security: Detect homograph attacks
+if !uax24.IsSingleScript("myVariаble") {  // 'а' is Cyrillic
+    // Warning: Mixed scripts detected
+}
+```
+
 ### [uax29](./uax29) - Text Segmentation
 
 Implementation of UAX #29 (Unicode Text Segmentation) for breaking text into grapheme clusters, words, and sentences.
@@ -242,6 +279,7 @@ if uts15.IsNFC("café") {
 go get github.com/SCKelemen/unicode/uax9
 go get github.com/SCKelemen/unicode/uax11
 go get github.com/SCKelemen/unicode/uax14
+go get github.com/SCKelemen/unicode/uax24
 go get github.com/SCKelemen/unicode/uax29
 go get github.com/SCKelemen/unicode/uax50
 go get github.com/SCKelemen/unicode/uts15
@@ -437,6 +475,11 @@ All implementations follow the Unicode Standard and are tested against official 
   - Tailorable break opportunities
   - Complex script handling (CJK, Thai, etc.)
   - Hyphenation support (soft hyphens U+00AD)
+- **UAX #24 (Script Property)**: 100% conformance (159,866/159,866 tests)
+  - Script property lookup for all Unicode 17.0.0 characters
+  - 174 scripts with ISO 15924 codes
+  - Mixed-script detection and validation
+  - Common and Inherited script handling
 - **UAX #29 (Text Segmentation)**: 100% conformance (3,222/3,222 tests)
   - Grapheme cluster breaking: 766/766 tests
   - Word breaking: 1,944/1,944 tests
@@ -460,6 +503,7 @@ Implementations are validated using the official Unicode Character Database (UCD
 - [UAX #9 Test Files](https://www.unicode.org/Public/17.0.0/ucd/) - `BidiTest.txt` (513,494 tests), `BidiCharacterTest.txt`
 - [UAX #11 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `EastAsianWidth.txt` property data
 - [UAX #14 Test Files](https://www.unicode.org/Public/17.0.0/ucd/auxiliary/) - `LineBreakTest.txt` (19,338 tests)
+- [UAX #24 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `Scripts.txt` (159,866 tests)
 - [UAX #29 Test Files](https://www.unicode.org/Public/17.0.0/ucd/auxiliary/) - `GraphemeBreakTest.txt`, `WordBreakTest.txt`, `SentenceBreakTest.txt`
 - [UAX #50 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `VerticalOrientation.txt` property data
 - [UTS #15 Test Files](https://www.unicode.org/Public/17.0.0/ucd/) - `NormalizationTest.txt` (20,034 tests)
