@@ -266,7 +266,7 @@ const (
 
 // String returns the ISO 15924 4-letter code for the script.
 func (s Script) String() string {
-	if s < 0 || int(s) >= len(scriptNames) {
+	if int(s) >= len(scriptNames) {
 		return "Unknown"
 	}
 	return scriptNames[s]
