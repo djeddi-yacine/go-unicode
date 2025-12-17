@@ -156,6 +156,10 @@ const (
 	BreakIndirect
 	// BreakMandatory means a line break is required
 	BreakMandatory
+
+	// breakActionNotFound is a sentinel value for "not in pair table"
+	// Used internally in pairTableFlat to distinguish empty entries from BreakProhibited (0)
+	breakActionNotFound BreakAction = 255
 )
 
 // applyEAWidthVariant returns the East Asian Width variant of a break class if applicable.
@@ -4197,18 +4201,38 @@ var pairTable = map[[2]BreakClass]BreakAction{
 	{ClassZWJ, ClassXX}: BreakIndirect,
 }
 
+// pairTableFlat is a cache-friendly flat array version of pairTable.
+// Populated at init time for O(1) direct indexing without map overhead.
+// Size: 256×256 = 65,536 bytes (fits in L2 cache)
+var pairTableFlat [256][256]BreakAction
+
+func init() {
+	// Initialize all entries to "not found" sentinel
+	for i := range pairTableFlat {
+		for j := range pairTableFlat[i] {
+			pairTableFlat[i][j] = breakActionNotFound
+		}
+	}
+
+	// Populate flat array from map for fast array-based lookups
+	for key, action := range pairTable {
+		pairTableFlat[key[0]][key[1]] = action
+	}
+}
+
 // getBreakAction returns the break action between two character classes.
+// Uses direct array indexing for O(1) lookups without map overhead.
 func getBreakAction(before, after BreakClass) BreakAction {
-	// Try exact match first
-	if action, ok := pairTable[[2]BreakClass{before, after}]; ok {
+	// Try exact match first (direct array lookup)
+	if action := pairTableFlat[before][after]; action != breakActionNotFound {
 		return action
 	}
 
 	// Try wildcard patterns: {before, XX} and {XX, after}
-	if action, ok := pairTable[[2]BreakClass{before, ClassXX}]; ok {
+	if action := pairTableFlat[before][ClassXX]; action != breakActionNotFound {
 		return action
 	}
-	if action, ok := pairTable[[2]BreakClass{ClassXX, after}]; ok {
+	if action := pairTableFlat[ClassXX][after]; action != breakActionNotFound {
 		return action
 	}
 
