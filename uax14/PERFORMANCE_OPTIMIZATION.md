@@ -137,11 +137,17 @@ for checkIdx := pos - 3; checkIdx >= 0 && checkIdx > pos-30; checkIdx-- {
 2. ✅ Add sentinel value for "not found" entries (DONE)
 3. ✅ Benchmark and verify (DONE - modest gains, rule iteration is bottleneck)
 
-### Phase 3: Streaming Parser (v5.1.0 or v6.0.0) - **Target: 2-3x**
-1. Design `LineBreakEnvironment`
-2. Implement state tracking
-3. Port rules to use environment
-4. Maintain 100% conformance
+### Phase 3: Environment Infrastructure (v5.0.3) - **Done, 1.02x**
+1. ✅ Design `LineBreakEnvironment` structure
+2. ✅ Add environment to context with updateEnvironment()
+3. ✅ Track state during forward pass (quotes, RIs, Hebrew, etc.)
+4. ✅ Maintain 100% conformance
+
+### Phase 4: Streaming Parser Rules (v5.0.4) - **Done, 1.05x**
+1. ✅ Port LB30a (Regional Indicators) to use env.riCount
+2. ✅ Port LB19 (German quotes) to use env.quoteStack
+3. ✅ Eliminate backward scanning for these rules
+4. ✅ Maintain 100% conformance
 
 ## Combined Potential
 
@@ -150,9 +156,12 @@ Starting: **2.5x slower** than original
 After all optimizations: **0.8-1.0x** (potentially faster than original!)
 
 - Phase 1: ✅ 2.5x → 2.4x slower (bitpacking: 1.05x improvement)
-- Phase 2: ✅ 2.4x → 2.35x slower (flat array: 1.025x improvement, modest due to rule iteration bottleneck)
-- Phase 3: ⏳ 2.35x → ? (profile-guided fast path - needs investigation)
-- Phase 4: ⏳ ? → 1.0x slower (streaming parser: architectural change required)
+- Phase 2: ✅ 2.4x → 2.35x slower (flat array: 1.025x improvement)
+- Phase 3: ✅ 2.35x → 2.3x slower (environment infra: 1.02x improvement)
+- Phase 4: ✅ 2.3x → 2.2x slower (streaming rules: 1.05x improvement)
+- **Total: 1.14x cumulative improvement**
+
+**Remaining gap**: Rule iteration overhead is the primary bottleneck (~60% of cost)
 
 ## Benchmarking Commands
 
