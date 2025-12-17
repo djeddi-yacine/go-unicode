@@ -196,6 +196,46 @@ if uts51.IsValidEmojiSequence(sequence) {
 }
 ```
 
+### [uts15](./uts15) - Unicode Normalization Forms
+
+Implementation of UTS #15 (Unicode Normalization Forms) for text normalization, comparison, and canonicalization.
+
+**Status:** Complete with 100% conformance (20,034/20,034 tests passing)
+
+Supports:
+- **NFC (Canonical Composition)** - Recommended form for most uses
+- **NFD (Canonical Decomposition)** - Fully decomposed form
+- **NFKC (Compatibility Composition)** - Aggressive normalization for identifiers
+- **NFKD (Compatibility Decomposition)** - Fully compatibility decomposed
+- **Hangul composition/decomposition** - Algorithmic Hangul syllable handling
+- **Canonical ordering** - Proper combining mark ordering
+- **Normalization stability** - Idempotent operations
+- Complete Unicode 17.0.0 normalization data
+
+```go
+import "github.com/SCKelemen/unicode/uts15"
+
+// Normalize to NFC (recommended for most uses)
+text := "café"  // May be composed or decomposed
+normalized := uts15.NFC(text)
+
+// Compare strings reliably
+s1 := "café"  // Composed form
+s2 := "cafe\u0301"  // Decomposed form (e + combining accent)
+if uts15.NFC(s1) == uts15.NFC(s2) {
+    // Strings are equivalent
+}
+
+// Normalize for searching (NFKC removes formatting distinctions)
+query := "\uFB01le"  // Contains ﬁ ligature
+normalized := uts15.NFKC(query)  // "file"
+
+// Check if already normalized
+if uts15.IsNFC("café") {
+    // No normalization needed
+}
+```
+
 ## Installation
 
 ```bash
@@ -204,6 +244,7 @@ go get github.com/SCKelemen/unicode/uax11
 go get github.com/SCKelemen/unicode/uax14
 go get github.com/SCKelemen/unicode/uax29
 go get github.com/SCKelemen/unicode/uax50
+go get github.com/SCKelemen/unicode/uts15
 go get github.com/SCKelemen/unicode/uts51
 ```
 
@@ -405,6 +446,11 @@ All implementations follow the Unicode Standard and are tested against official 
   - Glyph transformation detection
   - Base orientation determination
   - Mixed-script vertical layout support
+- **UTS #15 (Normalization Forms)**: 100% conformance (20,034/20,034 tests)
+  - NFC, NFD, NFKC, NFKD normalization forms
+  - Hangul composition and decomposition
+  - Canonical ordering of combining marks
+  - Normalization stability verification
 - **UTS #51 (Unicode Emoji)**: 100% conformance (5,223/5,223 tests)
   - All 6 emoji properties correctly implemented
   - Complete sequence validation (ZWJ, modifier, flag, keycap, tag sequences)
@@ -416,6 +462,7 @@ Implementations are validated using the official Unicode Character Database (UCD
 - [UAX #14 Test Files](https://www.unicode.org/Public/17.0.0/ucd/auxiliary/) - `LineBreakTest.txt` (19,338 tests)
 - [UAX #29 Test Files](https://www.unicode.org/Public/17.0.0/ucd/auxiliary/) - `GraphemeBreakTest.txt`, `WordBreakTest.txt`, `SentenceBreakTest.txt`
 - [UAX #50 Data Files](https://www.unicode.org/Public/17.0.0/ucd/) - `VerticalOrientation.txt` property data
+- [UTS #15 Test Files](https://www.unicode.org/Public/17.0.0/ucd/) - `NormalizationTest.txt` (20,034 tests)
 - [UTS #51 Test Files](https://www.unicode.org/Public/emoji/17.0/) - `emoji-test.txt` with 5,223 test cases
 - [Unicode Character Database](https://www.unicode.org/Public/17.0.0/ucd/) - Character property data files
 
