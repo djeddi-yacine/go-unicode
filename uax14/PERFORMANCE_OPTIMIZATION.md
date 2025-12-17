@@ -149,6 +149,26 @@ for checkIdx := pos - 3; checkIdx >= 0 && checkIdx > pos-30; checkIdx-- {
 3. ✅ Eliminate backward scanning for these rules
 4. ✅ Maintain 100% conformance
 
+### Phase 5: Dense Enum Packing (v5.0.5) - **Done, 1.07x**
+1. ✅ Renumber BreakClass enums from sparse (0-144) to dense (0-64)
+2. ✅ Remove all iota offsets for sequential numbering
+3. ✅ Shrink pair table from [256][256] to [128][128]
+4. ✅ Add bounds checking to catch future violations
+5. ✅ Maintain 100% conformance
+
+### Phase 6: Sentinel Range Checks (v5.0.6) - **Reverted, -3.9%**
+1. ✅ Added sentinel constants (_mandatoryFirst, _hangulFirst, etc.)
+2. ✅ Added inline helper functions (isMandatoryBreak, isHangul, etc.)
+3. ✅ Replaced multi-comparison chains with range checks
+4. ❌ **Performance regression: 3.9% slower**
+5. ❌ **REVERTED** - Range checks caused worse branch prediction
+
+**Why it failed**: UAX #14 rules check specific combinations (e.g., "BK | CR | LF | NL")
+rather than semantic categories. Range checks `c >= min && c <= max` have different
+branch prediction behavior than multiple equality checks, causing measurable regression.
+The Go compiler token approach works because tokens are checked by category; UAX #14
+checks are pattern-based. Lesson: Profile-guided optimization data beats intuition.
+
 ## Combined Potential
 
 Starting: **2.5x slower** than original
@@ -159,7 +179,10 @@ After all optimizations: **0.8-1.0x** (potentially faster than original!)
 - Phase 2: ✅ 2.4x → 2.35x slower (flat array: 1.025x improvement)
 - Phase 3: ✅ 2.35x → 2.3x slower (environment infra: 1.02x improvement)
 - Phase 4: ✅ 2.3x → 2.2x slower (streaming rules: 1.05x improvement)
-- **Total: 1.14x cumulative improvement**
+- Phase 5: ✅ 2.2x → 2.05x slower (dense enums: 1.07x improvement)
+- **Total: 1.22x cumulative improvement**
+
+**Current state**: 2.5x slower → **2.05x slower** (short text: 373 ns → 1,180 ns)
 
 **Remaining gap**: Rule iteration overhead is the primary bottleneck (~60% of cost)
 
