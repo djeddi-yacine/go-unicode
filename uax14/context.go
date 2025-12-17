@@ -134,26 +134,36 @@ func (c *LineBreakContext) BytePos() int {
 }
 
 // Pos returns the current rune position.
+//
+//go:inline
 func (c *LineBreakContext) Pos() int {
 	return c.pos
 }
 
 // Prev returns the line break class of the previous character.
+//
+//go:inline
 func (c *LineBreakContext) Prev() BreakClass {
 	return c.prevClass
 }
 
 // Curr returns the line break class of the current character.
+//
+//go:inline
 func (c *LineBreakContext) Curr() BreakClass {
 	return c.currClass
 }
 
 // Next returns the line break class of the next character.
+//
+//go:inline
 func (c *LineBreakContext) Next() BreakClass {
 	return c.nextClass
 }
 
 // Rune returns the rune at the current position.
+//
+//go:inline
 func (c *LineBreakContext) Rune() rune {
 	if c.pos < 0 || c.pos >= len(c.runes) {
 		return 0
@@ -162,6 +172,8 @@ func (c *LineBreakContext) Rune() rune {
 }
 
 // RuneAt returns the rune at the specified position.
+//
+//go:inline
 func (c *LineBreakContext) RuneAt(pos int) rune {
 	if pos < 0 || pos >= len(c.runes) {
 		return 0
@@ -170,6 +182,8 @@ func (c *LineBreakContext) RuneAt(pos int) rune {
 }
 
 // ClassAt returns the line break class at the specified position.
+//
+//go:inline
 func (c *LineBreakContext) ClassAt(pos int) BreakClass {
 	if pos < 0 || pos >= len(c.classes) {
 		return ClassAL // Default
@@ -178,11 +192,15 @@ func (c *LineBreakContext) ClassAt(pos int) BreakClass {
 }
 
 // LastNonSpace returns the last non-SP class seen.
+//
+//go:inline
 func (c *LineBreakContext) LastNonSpace() BreakClass {
 	return c.lastNonSpaceClass
 }
 
 // UpdatePrevClass updates the previous class (for state transitions after breaks).
+//
+//go:inline
 func (c *LineBreakContext) UpdatePrevClass(class BreakClass) {
 	c.prevClass = class
 	if class != ClassSP {
@@ -191,16 +209,22 @@ func (c *LineBreakContext) UpdatePrevClass(class BreakClass) {
 }
 
 // UpdateLastNonSpace updates the last non-space class tracker.
+//
+//go:inline
 func (c *LineBreakContext) UpdateLastNonSpace(class BreakClass) {
 	c.lastNonSpaceClass = class
 }
 
 // Len returns the total number of runes.
+//
+//go:inline
 func (c *LineBreakContext) Len() int {
 	return len(c.runes)
 }
 
 // Hyphens returns the hyphenation mode.
+//
+//go:inline
 func (c *LineBreakContext) Hyphens() Hyphens {
 	return c.hyphens
 }
