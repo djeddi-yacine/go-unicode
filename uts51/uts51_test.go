@@ -365,3 +365,120 @@ func BenchmarkEmojiWidth(b *testing.B) {
 		}
 	}
 }
+
+func TestEmojiSequenceWidth(t *testing.T) {
+	tests := []struct {
+		name     string
+		runes    []rune
+		expected int
+	}{
+		// Single emoji
+		{
+			name:     "Single emoji with presentation",
+			runes:    []rune{'😀'},
+			expected: 2,
+		},
+		{
+			name:     "Single emoji without presentation",
+			runes:    []rune{'☺'},
+			expected: 1,
+		},
+
+		// Flag sequences
+		{
+			name:     "US flag",
+			runes:    []rune{'\U0001F1FA', '\U0001F1F8'},
+			expected: 2,
+		},
+		{
+			name:     "UK flag",
+			runes:    []rune{'\U0001F1EC', '\U0001F1E7'},
+			expected: 2,
+		},
+		{
+			name:     "Japan flag",
+			runes:    []rune{'\U0001F1EF', '\U0001F1F5'},
+			expected: 2,
+		},
+
+		// Modifier sequences
+		{
+			name:     "Waving hand + light skin tone",
+			runes:    []rune{'👋', '\U0001F3FB'},
+			expected: 2,
+		},
+		{
+			name:     "Thumbs up + medium skin tone",
+			runes:    []rune{'👍', '\U0001F3FD'},
+			expected: 2,
+		},
+
+		// Presentation sequences
+		{
+			name:     "Red heart + emoji presentation",
+			runes:    []rune{'❤', '\uFE0F'},
+			expected: 2,
+		},
+		{
+			name:     "Red heart + text presentation",
+			runes:    []rune{'❤', '\uFE0E'},
+			expected: 1,
+		},
+
+		// ZWJ sequences
+		{
+			name:     "Family emoji",
+			runes:    []rune{'👨', '\u200D', '👩', '\u200D', '👧', '\u200D', '👦'},
+			expected: 2,
+		},
+		{
+			name:     "Woman technologist",
+			runes:    []rune{'👩', '\u200D', '💻'},
+			expected: 2,
+		},
+		{
+			name:     "Rainbow flag",
+			runes:    []rune{'🏳', '\uFE0F', '\u200D', '🌈'},
+			expected: 2,
+		},
+
+		// Keycap sequences
+		{
+			name:     "Keycap 9 (fully-qualified)",
+			runes:    []rune{'9', '\uFE0F', '\u20E3'},
+			expected: 2,
+		},
+		{
+			name:     "Keycap # (fully-qualified)",
+			runes:    []rune{'#', '\uFE0F', '\u20E3'},
+			expected: 2,
+		},
+
+		// Invalid sequences
+		{
+			name:     "Not an emoji sequence",
+			runes:    []rune{'A', 'B'},
+			expected: -1,
+		},
+		{
+			name:     "Empty sequence",
+			runes:    []rune{},
+			expected: -1,
+		},
+		{
+			name:     "Single emoji component (not valid alone)",
+			runes:    []rune{'\U0001F3FB'}, // Skin tone modifier alone
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := EmojiSequenceWidth(tt.runes)
+			if got != tt.expected {
+				t.Errorf("EmojiSequenceWidth(%+v) = %d, want %d",
+					tt.runes, got, tt.expected)
+			}
+		})
+	}
+}

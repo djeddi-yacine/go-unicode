@@ -330,6 +330,73 @@ func EmojiWidth(r rune) int {
 	return 0
 }
 
+// EmojiSequenceWidth returns the display width of an emoji sequence in terminal columns.
+//
+// Per UTS #51 §4 (Display): https://www.unicode.org/reports/tr51/#Display
+// "Emoji typically have the same vertical placement and advance width as
+// CJK ideographs."
+//
+// This function handles complete emoji sequences including:
+//   - Flag sequences (two regional indicators): width 2
+//   - ZWJ sequences (family, profession, etc.): width 2
+//   - Modifier sequences (emoji + skin tone): width 2
+//   - Presentation sequences (emoji + variation selector): width 2 or 1 based on selector
+//   - Keycap sequences ([0-9#*] + selectors): width 2
+//   - Tag sequences (subdivision flags): width 2
+//
+// Returns:
+//   - Width in terminal columns (typically 2 for emoji sequences)
+//   - -1 if the sequence is not a valid emoji sequence
+//
+// This is the preferred function for measuring emoji sequences. For single characters,
+// EmojiWidth() can be used, but EmojiSequenceWidth() handles multi-rune sequences correctly.
+//
+// Example:
+//
+//	uts51.EmojiSequenceWidth([]rune{'😀'})                    // 2 - single emoji
+//	uts51.EmojiSequenceWidth([]rune{'\U0001F1FA', '\U0001F1F8'})  // 2 - US flag
+//	uts51.EmojiSequenceWidth([]rune{'👋', '\U0001F3FB'})      // 2 - waving hand + light skin
+//	uts51.EmojiSequenceWidth([]rune{'👨', '\u200D', '👩', '\u200D', '👧', '\u200D', '👦'})  // 2 - family
+//	uts51.EmojiSequenceWidth([]rune{'❤', '\uFE0F'})          // 2 - red heart + emoji presentation
+//	uts51.EmojiSequenceWidth([]rune{'A', 'B'})               // -1 - not an emoji sequence
+func EmojiSequenceWidth(runes []rune) int {
+	// Validate it's an emoji sequence first
+	if !IsValidEmojiSequence(runes) {
+		return -1
+	}
+
+	// Single character - use EmojiWidth
+	if len(runes) == 1 {
+		width := EmojiWidth(runes[0])
+		if width == 0 {
+			return -1 // Single emoji component isn't a valid sequence
+		}
+		return width
+	}
+
+	// Presentation sequence (emoji + variation selector)
+	if len(runes) == 2 && IsEmoji(runes[0]) {
+		if runes[1] == VariationSelector16 {
+			// U+FE0F requests emoji presentation -> 2 columns
+			return 2
+		}
+		if runes[1] == VariationSelector15 {
+			// U+FE0E requests text presentation -> 1 column
+			return 1
+		}
+	}
+
+	// All other valid emoji sequences are 2 columns wide:
+	// - Flag sequences (regional indicator pairs)
+	// - Modifier sequences (base + skin tone)
+	// - ZWJ sequences (family, profession, etc.)
+	// - Keycap sequences ([0-9#*] + FE0F + 20E3)
+	// - Tag sequences (subdivision flags)
+	//
+	// Per UTS #51 §4, emoji display with the same width as CJK ideographs (2 columns)
+	return 2
+}
+
 // DefaultPresentation returns the default presentation for an emoji character.
 //
 // Per UTS #51 §2.1: https://www.unicode.org/reports/tr51/#Emoji_Presentation
