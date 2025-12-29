@@ -84,8 +84,9 @@ func TestProfilePairTableUsage(t *testing.T) {
 			} else {
 				// Parse hex codepoint
 				var codepoint rune
-				fmt.Sscanf(token, "%X", &codepoint)
-				runes = append(runes, codepoint)
+				if _, err := fmt.Sscanf(token, "%X", &codepoint); err == nil {
+					runes = append(runes, codepoint)
+				}
 			}
 		}
 

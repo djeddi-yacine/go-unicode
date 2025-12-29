@@ -92,9 +92,10 @@ func TestProfileConformanceTests(t *testing.T) {
 			} else {
 				// Parse hex codepoint
 				var codepoint rune
-				fmt.Sscanf(token, "%X", &codepoint)
-				runes = append(runes, codepoint)
-				expectedBreaks = append(expectedBreaks, false)
+				if _, err := fmt.Sscanf(token, "%X", &codepoint); err == nil {
+					runes = append(runes, codepoint)
+					expectedBreaks = append(expectedBreaks, false)
+				}
 			}
 		}
 
@@ -176,7 +177,7 @@ func printProfile(t *testing.T) {
 
 	for idx, matches := range ruleMatchCount {
 		checks := ruleCheckCount[idx]
-		name := "Unknown"
+		var name string
 		if idx < len(ruleNames) {
 			name = ruleNames[idx]
 		} else {

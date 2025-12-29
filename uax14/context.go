@@ -33,8 +33,7 @@ type LineBreakEnvironment struct {
 	lastHLPos int16 // Position of last HL (Hebrew Letter), -1 if none
 
 	// Bracket/parenthesis depth tracking
-	parenDepth   uint8 // Nesting depth for balanced parentheses
-	bracketDepth uint8 // Nesting depth for balanced brackets
+	parenDepth uint8 // Nesting depth for balanced parentheses
 
 	// Indic script state for Aksara rules (LB25, LB26, LB27)
 	inAksaraSequence bool
