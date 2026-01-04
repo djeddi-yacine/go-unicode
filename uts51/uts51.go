@@ -301,8 +301,18 @@ func inRanges(r rune, ranges []emojiRange) bool {
 //	uts51.EmojiWidth('☺')               // 1 - text presentation
 //	uts51.EmojiWidth('\U0001F3FB')      // 0 - skin tone modifier
 func EmojiWidth(r rune) int {
-	// Emoji components are zero-width
+	// Emoji components are usually zero-width, but some are printable standalone
 	if IsEmojiComponent(r) {
+		// Digits 0-9 (U+0030..U+0039) are emoji components for keycap sequences
+		// but display as 1 column when used standalone
+		if r >= 0x0030 && r <= 0x0039 {
+			return 1
+		}
+		// # (U+0023) and * (U+002A) are also printable emoji components
+		if r == 0x0023 || r == 0x002A {
+			return 1
+		}
+		// Other emoji components are zero-width (skin tones, ZWJ, etc.)
 		return 0
 	}
 
