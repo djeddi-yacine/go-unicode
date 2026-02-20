@@ -20,12 +20,12 @@ func TestOfficialConfusables(t *testing.T) {
 	// Download confusables.txt
 	resp, err := http.Get(confusablesTestURL)
 	if err != nil {
-		t.Fatalf("Failed to download confusables.txt: %v", err)
+		t.Skipf("Skipping official conformance test (download unavailable): %v", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("HTTP error: %d", resp.StatusCode)
+		t.Skipf("Skipping official conformance test (HTTP %d)", resp.StatusCode)
 	}
 
 	scanner := bufio.NewScanner(resp.Body)

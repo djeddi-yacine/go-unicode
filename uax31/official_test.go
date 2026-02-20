@@ -62,13 +62,13 @@ func testProperty(t *testing.T, url, propertyName string, testFunc func(rune) bo
 	// Download the property file
 	resp, err := http.Get(url)
 	if err != nil {
-		t.Fatalf("Failed to download %s: %v", url, err)
+		t.Skipf("Skipping official conformance test (download unavailable): %v", err)
 		return 0, 0
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("HTTP error downloading %s: %d", url, resp.StatusCode)
+		t.Skipf("Skipping official conformance test (HTTP %d)", resp.StatusCode)
 		return 0, 0
 	}
 
