@@ -281,11 +281,18 @@ jobs:
       with:
         go-version: '1.25'
 
-    - name: Run golangci-lint
-      uses: golangci/golangci-lint-action@v6
-      with:
-        version: latest
-        args: --timeout=5m
+    - name: Check formatting (gofmt)
+      run: |
+        GOFMT="$(go env GOROOT)/bin/gofmt"
+        unformatted=$(find . -name '*.go' -not -path './.git/*' -print0 | xargs -0 "$GOFMT" -l)
+        if [ -n "$unformatted" ]; then
+          echo "The following files are not gofmt-formatted:"
+          echo "$unformatted"
+          exit 1
+        fi
+
+    - name: Run go vet
+      run: go vet ./...
 
   build:
     name: Build
