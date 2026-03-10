@@ -112,7 +112,7 @@ func TestGetBreakClass(t *testing.T) {
 		{"newline", '\n', ClassLF},
 		{"carriage return", '\r', ClassCR},
 		{"space", ' ', ClassSP},
-		{"tab", '\t', ClassBA},         // Official Unicode: BA (Break After)
+		{"tab", '\t', ClassBA},             // Official Unicode: BA (Break After)
 		{"soft hyphen", '\u00AD', ClassBA}, // Official Unicode: BA (Break After)
 		{"hard hyphen", '-', ClassHY},
 		{"letter", 'a', ClassAL},
@@ -146,6 +146,24 @@ func TestHyphensConstants(t *testing.T) {
 	}
 	if HyphensAuto != 2 {
 		t.Errorf("HyphensAuto should be 2, got %d", HyphensAuto)
+	}
+}
+
+func TestGetBreakActionOutOfRangeDoesNotPanic(t *testing.T) {
+	tests := []struct {
+		before BreakClass
+		after  BreakClass
+	}{
+		{BreakClass(255), BreakClass(255)},
+		{BreakClass(255), ClassAL},
+		{ClassAL, BreakClass(255)},
+	}
+
+	for _, tt := range tests {
+		action := getBreakAction(tt.before, tt.after)
+		if action == breakActionNotFound {
+			t.Fatalf("getBreakAction(%d, %d) returned breakActionNotFound", tt.before, tt.after)
+		}
 	}
 }
 
