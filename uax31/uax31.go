@@ -163,6 +163,7 @@ func IsValidIdentifierContinue(r rune) bool {
 //   - The string must not be empty
 //
 // Example:
+//
 //	uax31.IsValidIdentifier("myVar")     // true
 //	uax31.IsValidIdentifier("my_var")    // true
 //	uax31.IsValidIdentifier("myVar123")  // true

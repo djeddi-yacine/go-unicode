@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates sentence_data.go from SentenceBreakProperty.txt

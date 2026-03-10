@@ -39,10 +39,10 @@ func ExampleAreConfusable() {
 func ExampleGetRestrictionLevel() {
 	// Check the restriction level of identifiers
 	examples := []string{
-		"hello_world",  // ASCII-Only
-		"café",         // Single-Script (Latin)
-		"hello世界",    // Minimally-Restrictive (Latin + Han)
-		"hello мир",    // Minimally-Restrictive (Latin + Cyrillic)
+		"hello_world", // ASCII-Only
+		"café",        // Single-Script (Latin)
+		"hello世界",     // Minimally-Restrictive (Latin + Han)
+		"hello мир",   // Minimally-Restrictive (Latin + Cyrillic)
 	}
 
 	for _, s := range examples {
@@ -59,10 +59,10 @@ func ExampleGetRestrictionLevel() {
 
 func ExampleIsMixedScript() {
 	// Detect if an identifier mixes multiple scripts
-	fmt.Println(uts39.IsMixedScript("hello"))     // Single script
-	fmt.Println(uts39.IsMixedScript("hello123"))  // Numbers are Common
+	fmt.Println(uts39.IsMixedScript("hello"))    // Single script
+	fmt.Println(uts39.IsMixedScript("hello123")) // Numbers are Common
 	fmt.Println(uts39.IsMixedScript("hello世界"))  // Latin + Han
-	fmt.Println(uts39.IsMixedScript("café"))      // Single script
+	fmt.Println(uts39.IsMixedScript("café"))     // Single script
 
 	// Output:
 	// false
@@ -154,7 +154,7 @@ func ExampleGetIdentifierScripts() {
 
 func ExampleSkeleton_normalization() {
 	// Different Unicode representations normalize to the same skeleton
-	composed := "café"    // Precomposed é (U+00E9)
+	composed := "café"         // Precomposed é (U+00E9)
 	decomposed := "cafe\u0301" // e + combining acute accent
 
 	// Both normalize to the same skeleton

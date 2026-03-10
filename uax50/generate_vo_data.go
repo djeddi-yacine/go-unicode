@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates vertical_orientation_data.go from VerticalOrientation.txt

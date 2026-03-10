@@ -14,6 +14,7 @@ package uax14
 
 // isRuleExceptionPair returns true if (prev, curr) needs rule checking.
 // Uses direct array indexing for O(1) lookup (no map overhead).
+//
 //go:inline
 func isRuleExceptionPair(prev, curr BreakClass) bool {
 	return ruleExceptionArray[prev][curr]

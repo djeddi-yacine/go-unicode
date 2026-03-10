@@ -76,25 +76,25 @@ const (
 
 // Aliases for use in generator (with underscores)
 const (
-	WB_Other              = WBOther
-	WB_CR                 = WBCR
-	WB_LF                 = WBLF
-	WB_Newline            = WBNewline
-	WB_Extend             = WBExtend
-	WB_ZWJ                = WBZWJ
-	WB_Regional_Indicator = WBRegionalIndicator
-	WB_Format             = WBFormat
-	WB_Katakana           = WBKatakana
-	WB_Hebrew_Letter      = WBHebrewLetter
-	WB_ALetter            = WBALetter
-	WB_Single_Quote       = WBSingleQuote
-	WB_Double_Quote       = WBDoubleQuote
-	WB_MidNumLet          = WBMidNumLet
-	WB_MidLetter          = WBMidLetter
-	WB_MidNum             = WBMidNum
-	WB_Numeric             = WBNumeric
-	WB_ExtendNumLet        = WBExtendNumLet
-	WB_WSegSpace           = WBWSegSpace
+	WB_Other                = WBOther
+	WB_CR                   = WBCR
+	WB_LF                   = WBLF
+	WB_Newline              = WBNewline
+	WB_Extend               = WBExtend
+	WB_ZWJ                  = WBZWJ
+	WB_Regional_Indicator   = WBRegionalIndicator
+	WB_Format               = WBFormat
+	WB_Katakana             = WBKatakana
+	WB_Hebrew_Letter        = WBHebrewLetter
+	WB_ALetter              = WBALetter
+	WB_Single_Quote         = WBSingleQuote
+	WB_Double_Quote         = WBDoubleQuote
+	WB_MidNumLet            = WBMidNumLet
+	WB_MidLetter            = WBMidLetter
+	WB_MidNum               = WBMidNum
+	WB_Numeric              = WBNumeric
+	WB_ExtendNumLet         = WBExtendNumLet
+	WB_WSegSpace            = WBWSegSpace
 	WB_ExtendedPictographic = WBExtendedPictographic
 )
 

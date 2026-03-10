@@ -6,19 +6,19 @@ import (
 
 // Test runes covering different bidi classes
 var benchRunes = []rune{
-	'a',     // ClassL (Latin)
-	'א',     // ClassR (Hebrew)
-	'ع',     // ClassAL (Arabic)
-	'0',     // ClassEN (European Number)
-	'+',     // ClassES (European Separator)
-	'$',     // ClassET (European Terminator)
-	'٠',     // ClassAN (Arabic Number) U+0660
-	',',     // ClassCS (Common Separator)
+	'a',      // ClassL (Latin)
+	'א',      // ClassR (Hebrew)
+	'ع',      // ClassAL (Arabic)
+	'0',      // ClassEN (European Number)
+	'+',      // ClassES (European Separator)
+	'$',      // ClassET (European Terminator)
+	'٠',      // ClassAN (Arabic Number) U+0660
+	',',      // ClassCS (Common Separator)
 	'\u0300', // ClassNSM (Nonspacing Mark)
-	'\n',    // ClassB (Paragraph Separator)
-	'\t',    // ClassS (Segment Separator)
-	' ',     // ClassWS (Whitespace)
-	'!',     // ClassON (Other Neutral)
+	'\n',     // ClassB (Paragraph Separator)
+	'\t',     // ClassS (Segment Separator)
+	' ',      // ClassWS (Whitespace)
+	'!',      // ClassON (Other Neutral)
 	'\u202A', // ClassLRE (Left-to-Right Embedding)
 	'\u2066', // ClassLRI (Left-to-Right Isolate)
 }

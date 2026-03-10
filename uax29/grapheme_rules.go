@@ -5,7 +5,7 @@ type BreakAction int
 
 const (
 	BreakNo  BreakAction = iota // × - Don't break
-	BreakYes                     // ÷ - Break allowed
+	BreakYes                    // ÷ - Break allowed
 )
 
 // GraphemeBreakRule checks if a rule applies and returns the action.
@@ -227,17 +227,17 @@ func ruleGB12_13(ctx *GraphemeBreakContext) (bool, BreakAction) {
 // graphemeBreakRules is the ordered list of all grapheme boundary rules.
 // Rules are checked in order - first match wins.
 var graphemeBreakRules = []GraphemeBreakRule{
-	ruleGB3,    // CR × LF
-	ruleGB4,    // (Control | CR | LF) ÷
-	ruleGB5,    // ÷ (Control | CR | LF)
-	ruleGB6,    // L × (L | V | LV | LVT)
-	ruleGB7,    // (LV | V) × (V | T)
-	ruleGB8,    // (LVT | T) × T
-	ruleGB9,    // × (Extend | ZWJ)
-	ruleGB9a,   // × SpacingMark
-	ruleGB9b,   // Prepend ×
-	ruleGB9c,   // Indic conjunct sequences
-	ruleGB11,   // ExtPict Extend* ZWJ × ExtPict
+	ruleGB3,     // CR × LF
+	ruleGB4,     // (Control | CR | LF) ÷
+	ruleGB5,     // ÷ (Control | CR | LF)
+	ruleGB6,     // L × (L | V | LV | LVT)
+	ruleGB7,     // (LV | V) × (V | T)
+	ruleGB8,     // (LVT | T) × T
+	ruleGB9,     // × (Extend | ZWJ)
+	ruleGB9a,    // × SpacingMark
+	ruleGB9b,    // Prepend ×
+	ruleGB9c,    // Indic conjunct sequences
+	ruleGB11,    // ExtPict Extend* ZWJ × ExtPict
 	ruleGB12_13, // RI × RI (pairs)
 	// GB999: Otherwise, break everywhere (default in main loop)
 }

@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates normalization_data.go from Unicode data files
@@ -16,13 +17,13 @@ import (
 )
 
 const (
-	unicodeDataURL       = "https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt"
-	compositionExclURL   = "https://www.unicode.org/Public/17.0.0/ucd/CompositionExclusions.txt"
+	unicodeDataURL     = "https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt"
+	compositionExclURL = "https://www.unicode.org/Public/17.0.0/ucd/CompositionExclusions.txt"
 )
 
 type decompositionData struct {
-	canonical    map[rune][]rune
-	compatibility map[rune][]rune
+	canonical      map[rune][]rune
+	compatibility  map[rune][]rune
 	combiningClass map[rune]uint8
 	compositions   map[[2]rune]rune
 	exclusions     map[rune]bool

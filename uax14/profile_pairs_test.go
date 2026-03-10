@@ -10,8 +10,8 @@ import (
 
 // Pair profiling counters
 var (
-	pairRuleHits  = make(map[[2]BreakClass]int64)  // Pairs that matched a rule
-	pairTableHits = make(map[[2]BreakClass]int64)  // Pairs that used pair table
+	pairRuleHits  = make(map[[2]BreakClass]int64) // Pairs that matched a rule
+	pairTableHits = make(map[[2]BreakClass]int64) // Pairs that used pair table
 	totalPairs    int64
 )
 

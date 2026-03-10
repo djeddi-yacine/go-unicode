@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates east_asian_width_data.go from EastAsianWidth.txt

@@ -5,8 +5,8 @@ package uax29
 // making rule implementation straightforward and maintainable.
 type GraphemeBreakContext struct {
 	// Input data (immutable)
-	text   string
-	runes  []rune
+	text    string
+	runes   []rune
 	classes []GraphemeBreakClass
 
 	// Position tracking
@@ -26,10 +26,10 @@ type GraphemeBreakContext struct {
 func NewGraphemeBreakContext(text string) *GraphemeBreakContext {
 	if text == "" {
 		return &GraphemeBreakContext{
-			text: "",
-			runes: []rune{},
+			text:    "",
+			runes:   []rune{},
 			classes: []GraphemeBreakClass{},
-			pos: -1,
+			pos:     -1,
 		}
 	}
 
@@ -52,10 +52,10 @@ func NewGraphemeBreakContext(text string) *GraphemeBreakContext {
 	}
 
 	ctx := &GraphemeBreakContext{
-		text: text,
-		runes: runes,
-		classes: classes,
-		pos: 0,
+		text:          text,
+		runes:         runes,
+		classes:       classes,
+		pos:           0,
 		bytePositions: bytePositions,
 	}
 
@@ -70,10 +70,10 @@ func NewGraphemeBreakContext(text string) *GraphemeBreakContext {
 func NewGraphemeBreakContextFromClasses(text string, runes []rune, packedClasses []PackedBreakClass) *GraphemeBreakContext {
 	if len(runes) == 0 {
 		return &GraphemeBreakContext{
-			text: text,
-			runes: []rune{},
+			text:    text,
+			runes:   []rune{},
 			classes: []GraphemeBreakClass{},
-			pos: -1,
+			pos:     -1,
 		}
 	}
 
@@ -95,10 +95,10 @@ func NewGraphemeBreakContextFromClasses(text string, runes []rune, packedClasses
 	}
 
 	ctx := &GraphemeBreakContext{
-		text: text,
-		runes: runes,
-		classes: classes,
-		pos: 0,
+		text:          text,
+		runes:         runes,
+		classes:       classes,
+		pos:           0,
 		bytePositions: bytePositions,
 	}
 
@@ -230,8 +230,8 @@ func (c *GraphemeBreakContext) Len() int {
 // making rule implementation straightforward and maintainable.
 type WordBreakContext struct {
 	// Input data (immutable)
-	text   string
-	runes  []rune
+	text    string
+	runes   []rune
 	classes []WordBreakClass
 
 	// Grapheme boundary positions (rune indices)
@@ -254,11 +254,11 @@ type WordBreakContext struct {
 func NewWordBreakContextFromClasses(text string, runes []rune, packedClasses []PackedBreakClass, graphemeBreaks []int) *WordBreakContext {
 	if len(runes) == 0 {
 		return &WordBreakContext{
-			text: text,
-			runes: []rune{},
-			classes: []WordBreakClass{},
+			text:               text,
+			runes:              []rune{},
+			classes:            []WordBreakClass{},
 			graphemeBoundaries: []int{},
-			boundaryIdx: -1,
+			boundaryIdx:        -1,
 		}
 	}
 
@@ -292,12 +292,12 @@ func NewWordBreakContextFromClasses(text string, runes []rune, packedClasses []P
 	}
 
 	ctx := &WordBreakContext{
-		text: text,
-		runes: runes,
-		classes: classes,
+		text:               text,
+		runes:              runes,
+		classes:            classes,
 		graphemeBoundaries: graphemeBoundaries,
-		boundaryIdx: 0,
-		bytePositions: bytePositions,
+		boundaryIdx:        0,
+		bytePositions:      bytePositions,
 	}
 
 	// Initialize cached classes
@@ -431,8 +431,8 @@ func (w *WordBreakContext) Len() int {
 // making rule implementation straightforward and maintainable.
 type SentenceBreakContext struct {
 	// Input data (immutable)
-	text   string
-	runes  []rune
+	text    string
+	runes   []rune
 	classes []SentenceBreakClass
 
 	// Word boundary positions (rune indices)
@@ -455,11 +455,11 @@ type SentenceBreakContext struct {
 func NewSentenceBreakContextFromClasses(text string, runes []rune, packedClasses []PackedBreakClass, wordBreaks []int) *SentenceBreakContext {
 	if len(runes) == 0 {
 		return &SentenceBreakContext{
-			text: text,
-			runes: []rune{},
-			classes: []SentenceBreakClass{},
+			text:           text,
+			runes:          []rune{},
+			classes:        []SentenceBreakClass{},
 			wordBoundaries: []int{},
-			boundaryIdx: -1,
+			boundaryIdx:    -1,
 		}
 	}
 
@@ -493,12 +493,12 @@ func NewSentenceBreakContextFromClasses(text string, runes []rune, packedClasses
 	}
 
 	ctx := &SentenceBreakContext{
-		text: text,
-		runes: runes,
-		classes: classes,
+		text:           text,
+		runes:          runes,
+		classes:        classes,
 		wordBoundaries: wordBoundaries,
-		boundaryIdx: 0,
-		bytePositions: bytePositions,
+		boundaryIdx:    0,
+		bytePositions:  bytePositions,
 	}
 
 	// Initialize cached classes

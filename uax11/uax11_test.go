@@ -161,10 +161,10 @@ func TestIsAmbiguous(t *testing.T) {
 // Test context-based width resolution
 func TestResolveWidth(t *testing.T) {
 	tests := []struct {
-		r               rune
-		ctx             Context
-		expected        Width
-		name            string
+		r        rune
+		ctx      Context
+		expected Width
+		name     string
 	}{
 		// Ambiguous in East Asian context becomes Wide
 		{'Ω', ContextEastAsian, Wide, "Greek Omega in East Asian context"},

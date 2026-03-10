@@ -91,7 +91,7 @@ func ruleWB6(ctx *WordBreakContext) (bool, BreakAction) {
 	curr := ctx.Curr()
 
 	if (prev == WBALetter || prev == WBHebrewLetter) &&
-	   (curr == WBMidLetter || curr == WBMidNumLet || curr == WBSingleQuote) {
+		(curr == WBMidLetter || curr == WBMidNumLet || curr == WBSingleQuote) {
 		// Look ahead for AHLetter
 		next, _ := ctx.NextNonIgnorable()
 		if next == WBALetter || next == WBHebrewLetter {
@@ -108,13 +108,13 @@ func ruleWB7(ctx *WordBreakContext) (bool, BreakAction) {
 	curr := ctx.Curr()
 
 	if (prev == WBMidLetter || prev == WBMidNumLet || prev == WBSingleQuote) &&
-	   (curr == WBALetter || curr == WBHebrewLetter) {
+		(curr == WBALetter || curr == WBHebrewLetter) {
 		// Look back past the MidLetter for AHLetter
 		if prevPos > 0 {
 			prevPrevPos := prevPos - 1
 			for prevPrevPos > 0 && (ctx.ClassAt(prevPrevPos) == WBFormat ||
-			                        ctx.ClassAt(prevPrevPos) == WBExtend ||
-			                        ctx.ClassAt(prevPrevPos) == WBZWJ) {
+				ctx.ClassAt(prevPrevPos) == WBExtend ||
+				ctx.ClassAt(prevPrevPos) == WBZWJ) {
 				prevPrevPos--
 			}
 			if prevPrevPos >= 0 {
@@ -165,8 +165,8 @@ func ruleWB7c(ctx *WordBreakContext) (bool, BreakAction) {
 		if prevPos > 0 {
 			prevPrevPos := prevPos - 1
 			for prevPrevPos > 0 && (ctx.ClassAt(prevPrevPos) == WBFormat ||
-			                        ctx.ClassAt(prevPrevPos) == WBExtend ||
-			                        ctx.ClassAt(prevPrevPos) == WBZWJ) {
+				ctx.ClassAt(prevPrevPos) == WBExtend ||
+				ctx.ClassAt(prevPrevPos) == WBZWJ) {
 				prevPrevPos--
 			}
 			if prevPrevPos >= 0 && ctx.ClassAt(prevPrevPos) == WBHebrewLetter {
@@ -222,8 +222,8 @@ func ruleWB11(ctx *WordBreakContext) (bool, BreakAction) {
 		if prevPos > 0 {
 			prevPrevPos := prevPos - 1
 			for prevPrevPos > 0 && (ctx.ClassAt(prevPrevPos) == WBFormat ||
-			                        ctx.ClassAt(prevPrevPos) == WBExtend ||
-			                        ctx.ClassAt(prevPrevPos) == WBZWJ) {
+				ctx.ClassAt(prevPrevPos) == WBExtend ||
+				ctx.ClassAt(prevPrevPos) == WBZWJ) {
 				prevPrevPos--
 			}
 			if prevPrevPos >= 0 && ctx.ClassAt(prevPrevPos) == WBNumeric {
@@ -268,7 +268,7 @@ func ruleWB13a(ctx *WordBreakContext) (bool, BreakAction) {
 	prev, _ := ctx.PrevNonIgnorable()
 	curr := ctx.Curr()
 	if (prev == WBALetter || prev == WBHebrewLetter || prev == WBNumeric ||
-	    prev == WBKatakana || prev == WBExtendNumLet) && curr == WBExtendNumLet {
+		prev == WBKatakana || prev == WBExtendNumLet) && curr == WBExtendNumLet {
 		return true, BreakNo
 	}
 	return false, BreakYes
@@ -280,7 +280,7 @@ func ruleWB13b(ctx *WordBreakContext) (bool, BreakAction) {
 	prev, _ := ctx.PrevNonIgnorable()
 	curr := ctx.Curr()
 	if prev == WBExtendNumLet && (curr == WBALetter || curr == WBHebrewLetter ||
-	                               curr == WBNumeric || curr == WBKatakana) {
+		curr == WBNumeric || curr == WBKatakana) {
 		return true, BreakNo
 	}
 	return false, BreakYes
@@ -319,26 +319,26 @@ func ruleWB15_16(ctx *WordBreakContext) (bool, BreakAction) {
 // wordBreakRules is the ordered list of all word boundary rules.
 // Rules are checked in order - first match wins.
 var wordBreakRules = []WordBreakRule{
-	ruleWB3,    // CR × LF
-	ruleWB3a,   // (Newline | CR | LF) ÷
-	ruleWB3b,   // ÷ (Newline | CR | LF)
-	ruleWB3c,   // ZWJ × ExtPict
-	ruleWB3d,   // WSegSpace × WSegSpace
-	ruleWB4,    // × (Format | Extend | ZWJ)
-	ruleWB5,    // AHLetter × AHLetter
-	ruleWB6,    // AHLetter × (MidLetter | MidNumLet | Single_Quote) AHLetter
-	ruleWB7,    // AHLetter (MidLetter | MidNumLet | Single_Quote) × AHLetter
-	ruleWB7a,   // Hebrew_Letter × Single_Quote
-	ruleWB7b,   // Hebrew_Letter × Double_Quote Hebrew_Letter
-	ruleWB7c,   // Hebrew_Letter Double_Quote × Hebrew_Letter
-	ruleWB8,    // Numeric × Numeric
-	ruleWB9,    // AHLetter × Numeric
-	ruleWB10,   // Numeric × AHLetter
-	ruleWB11,   // Numeric (MidNum | MidNumLet | Single_Quote) × Numeric
-	ruleWB12,   // Numeric × (MidNum | MidNumLet | Single_Quote) Numeric
-	ruleWB13,   // Katakana × Katakana
-	ruleWB13a,  // (AHLetter | Numeric | Katakana | ExtendNumLet) × ExtendNumLet
-	ruleWB13b,  // ExtendNumLet × (AHLetter | Numeric | Katakana)
+	ruleWB3,     // CR × LF
+	ruleWB3a,    // (Newline | CR | LF) ÷
+	ruleWB3b,    // ÷ (Newline | CR | LF)
+	ruleWB3c,    // ZWJ × ExtPict
+	ruleWB3d,    // WSegSpace × WSegSpace
+	ruleWB4,     // × (Format | Extend | ZWJ)
+	ruleWB5,     // AHLetter × AHLetter
+	ruleWB6,     // AHLetter × (MidLetter | MidNumLet | Single_Quote) AHLetter
+	ruleWB7,     // AHLetter (MidLetter | MidNumLet | Single_Quote) × AHLetter
+	ruleWB7a,    // Hebrew_Letter × Single_Quote
+	ruleWB7b,    // Hebrew_Letter × Double_Quote Hebrew_Letter
+	ruleWB7c,    // Hebrew_Letter Double_Quote × Hebrew_Letter
+	ruleWB8,     // Numeric × Numeric
+	ruleWB9,     // AHLetter × Numeric
+	ruleWB10,    // Numeric × AHLetter
+	ruleWB11,    // Numeric (MidNum | MidNumLet | Single_Quote) × Numeric
+	ruleWB12,    // Numeric × (MidNum | MidNumLet | Single_Quote) Numeric
+	ruleWB13,    // Katakana × Katakana
+	ruleWB13a,   // (AHLetter | Numeric | Katakana | ExtendNumLet) × ExtendNumLet
+	ruleWB13b,   // ExtendNumLet × (AHLetter | Numeric | Katakana)
 	ruleWB15_16, // RI × RI (pairs)
 	// WB999: Otherwise, break everywhere (default in main loop)
 }

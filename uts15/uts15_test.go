@@ -160,10 +160,10 @@ func TestIsNFC(t *testing.T) {
 		expected bool
 	}{
 		{"hello", true},
-		{"\u00E9", true},              // é (composed)
-		{"e\u0301", false},             // e + acute (decomposed)
-		{"\uAC00", true},               // Hangul syllable (composed)
-		{"\u1100\u1161", false},        // Hangul L+V (decomposed)
+		{"\u00E9", true},        // é (composed)
+		{"e\u0301", false},      // e + acute (decomposed)
+		{"\uAC00", true},        // Hangul syllable (composed)
+		{"\u1100\u1161", false}, // Hangul L+V (decomposed)
 		{"", true},
 	}
 
@@ -181,10 +181,10 @@ func TestIsNFD(t *testing.T) {
 		expected bool
 	}{
 		{"hello", true},
-		{"\u00E9", false},              // é (composed)
-		{"e\u0301", true},              // e + acute (decomposed)
-		{"\uAC00", false},              // Hangul syllable (composed)
-		{"\u1100\u1161", true},         // Hangul L+V (decomposed)
+		{"\u00E9", false},      // é (composed)
+		{"e\u0301", true},      // e + acute (decomposed)
+		{"\uAC00", false},      // Hangul syllable (composed)
+		{"\u1100\u1161", true}, // Hangul L+V (decomposed)
 		{"", true},
 	}
 
@@ -253,7 +253,7 @@ func TestHangulComposition(t *testing.T) {
 
 func TestHangulDecomposition(t *testing.T) {
 	tests := []struct {
-		syllable rune
+		syllable   rune
 		l, v, tOpt rune
 		name       string
 	}{

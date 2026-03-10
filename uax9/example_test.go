@@ -78,13 +78,13 @@ func ExampleReorder_punctuation() {
 // ExampleGetBidiClass demonstrates checking the bidirectional class of characters.
 func ExampleGetBidiClass() {
 	// Check various character types
-	fmt.Println(uax9.GetBidiClass('a'))  // Latin letter
-	fmt.Println(uax9.GetBidiClass('א'))  // Hebrew letter
-	fmt.Println(uax9.GetBidiClass('ا'))  // Arabic letter
-	fmt.Println(uax9.GetBidiClass('5'))  // European digit
-	fmt.Println(uax9.GetBidiClass('+'))  // Number separator
-	fmt.Println(uax9.GetBidiClass(' '))  // Space
-	fmt.Println(uax9.GetBidiClass('!'))  // Punctuation
+	fmt.Println(uax9.GetBidiClass('a')) // Latin letter
+	fmt.Println(uax9.GetBidiClass('א')) // Hebrew letter
+	fmt.Println(uax9.GetBidiClass('ا')) // Arabic letter
+	fmt.Println(uax9.GetBidiClass('5')) // European digit
+	fmt.Println(uax9.GetBidiClass('+')) // Number separator
+	fmt.Println(uax9.GetBidiClass(' ')) // Space
+	fmt.Println(uax9.GetBidiClass('!')) // Punctuation
 	// Output:
 	// L
 	// R

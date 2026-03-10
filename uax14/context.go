@@ -20,10 +20,10 @@ type QuoteContext struct {
 // Pre-allocated at context creation, zero heap allocations during scanning.
 type LineBreakEnvironment struct {
 	// Quote tracking for LB19 (German quotes „..."）
-	quoteStack       [8]QuoteContext // Stack of opening quotes (max 8 nesting levels)
-	quoteTop         uint8           // Stack pointer (0 = empty)
-	lastClosedQuote  int16           // Position of last closed German quote (-1 if none)
-	lastClosedIsGerman bool          // Was the last closed quote a German quote?
+	quoteStack         [8]QuoteContext // Stack of opening quotes (max 8 nesting levels)
+	quoteTop           uint8           // Stack pointer (0 = empty)
+	lastClosedQuote    int16           // Position of last closed German quote (-1 if none)
+	lastClosedIsGerman bool            // Was the last closed quote a German quote?
 
 	// Regional Indicator tracking for LB30a
 	riCount    uint8 // Count of consecutive RIs seen
@@ -49,8 +49,8 @@ type LineBreakEnvironment struct {
 // making rule implementation straightforward and maintainable.
 type LineBreakContext struct {
 	// Input data (immutable)
-	text   string
-	runes  []rune
+	text    string
+	runes   []rune
 	classes []BreakClass
 	hyphens Hyphens
 
@@ -77,11 +77,11 @@ type LineBreakContext struct {
 func NewLineBreakContext(text string, hyphens Hyphens) *LineBreakContext {
 	if text == "" {
 		return &LineBreakContext{
-			text: text,
-			runes: []rune{},
+			text:    text,
+			runes:   []rune{},
 			classes: []BreakClass{},
 			hyphens: hyphens,
-			pos: -1,
+			pos:     -1,
 		}
 	}
 
@@ -104,11 +104,11 @@ func NewLineBreakContext(text string, hyphens Hyphens) *LineBreakContext {
 	}
 
 	ctx := &LineBreakContext{
-		text: text,
-		runes: runes,
-		classes: classes,
-		hyphens: hyphens,
-		pos: 0,
+		text:          text,
+		runes:         runes,
+		classes:       classes,
+		hyphens:       hyphens,
+		pos:           0,
 		bytePositions: bytePositions,
 	}
 

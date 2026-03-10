@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates confusables_data.go from Unicode confusables.txt

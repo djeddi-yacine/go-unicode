@@ -95,6 +95,7 @@ func isASCII(s string) bool {
 // composed characters when possible while maintaining canonical equivalence.
 //
 // Example:
+//
 //	NFC("e\u0301") // Returns "é" (U+00E9)
 //
 // See: https://www.unicode.org/reports/tr15/#Norm_Forms
@@ -115,6 +116,7 @@ func NFC(s string) string {
 // orders combining marks by their canonical combining class.
 //
 // Example:
+//
 //	NFD("é") // Returns "e\u0301" (e + combining acute accent)
 //
 // See: https://www.unicode.org/reports/tr15/#Norm_Forms
@@ -132,6 +134,7 @@ func NFD(s string) string {
 // It's more aggressive than NFC and removes formatting distinctions.
 //
 // Example:
+//
 //	NFKC("ﬁ") // Returns "fi" (U+0066 U+0069)
 //
 // Use NFKC for:
@@ -157,6 +160,7 @@ func NFKC(s string) string {
 // It decomposes compatibility characters like ligatures and circled letters.
 //
 // Example:
+//
 //	NFKD("ﬁ") // Returns "fi"
 //	NFKD("①") // Returns "1"
 //

@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates emoji_data.go from emoji-data.txt

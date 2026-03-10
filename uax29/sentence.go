@@ -182,7 +182,7 @@ func FindSentenceBreaks(text string) []int {
 				} else if curr == SBSContinue || curr == SBSTerm || curr == SBATerm {
 					// SB8a: (ATerm|STerm) Close* Sp* × (SContinue | STerm | ATerm)
 					shouldBreak = false
-				} else if (curr == SBSp || curr == SBSep || curr == SBCR || curr == SBLF) {
+				} else if curr == SBSp || curr == SBSep || curr == SBCR || curr == SBLF {
 					// SB10: ATerm Close* Sp* × (Sp | Sep | CR | LF) - don't break
 					shouldBreak = false
 				} else if curr == SBClose && !hasSpBeforePrev {

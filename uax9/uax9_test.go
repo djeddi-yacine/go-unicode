@@ -70,12 +70,12 @@ func TestGetBidiClass(t *testing.T) {
 	}{
 		{'a', ClassL},
 		{'Z', ClassL},
-		{'\u05D0', ClassR},      // Hebrew Alef
-		{'\u0627', ClassAL},     // Arabic Alef
+		{'\u05D0', ClassR},  // Hebrew Alef
+		{'\u0627', ClassAL}, // Arabic Alef
 		{'0', ClassEN},
 		{'9', ClassEN},
 		{' ', ClassWS},
-		{'\t', ClassS},  // Tab is Segment Separator, not Whitespace
+		{'\t', ClassS}, // Tab is Segment Separator, not Whitespace
 		{'\n', ClassB},
 		{'+', ClassES},
 		{'-', ClassES},

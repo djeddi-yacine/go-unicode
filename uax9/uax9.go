@@ -86,41 +86,41 @@ const (
 	// Strong types determine the directionality of surrounding text.
 	// Reference: https://www.unicode.org/reports/tr9/#Strong_Types
 
-	ClassL   BidiClass = iota // Left-to-Right (e.g., Latin, Cyrillic)
-	ClassR                    // Right-to-Left (e.g., Hebrew)
-	ClassAL                   // Right-to-Left Arabic (Arabic, Thaana, Syriac)
+	ClassL  BidiClass = iota // Left-to-Right (e.g., Latin, Cyrillic)
+	ClassR                   // Right-to-Left (e.g., Hebrew)
+	ClassAL                  // Right-to-Left Arabic (Arabic, Thaana, Syriac)
 
 	// Weak types have directionality that depends on their context.
 	// Reference: https://www.unicode.org/reports/tr9/#Weak_Types
 
-	ClassEN                   // European Number (0-9, Extended Arabic-Indic digits)
-	ClassES                   // European Number Separator (+, -)
-	ClassET                   // European Number Terminator (currency, degree)
-	ClassAN                   // Arabic Number (Arabic-Indic digits)
-	ClassCS                   // Common Number Separator (., ,, :)
-	ClassNSM                  // Nonspacing Mark (combining marks)
-	ClassBN                   // Boundary Neutral (format controls, zero-width)
+	ClassEN  // European Number (0-9, Extended Arabic-Indic digits)
+	ClassES  // European Number Separator (+, -)
+	ClassET  // European Number Terminator (currency, degree)
+	ClassAN  // Arabic Number (Arabic-Indic digits)
+	ClassCS  // Common Number Separator (., ,, :)
+	ClassNSM // Nonspacing Mark (combining marks)
+	ClassBN  // Boundary Neutral (format controls, zero-width)
 
 	// Neutral types take directionality from their surrounding context.
 	// Reference: https://www.unicode.org/reports/tr9/#Neutral_Types
 
-	ClassB                    // Paragraph Separator (CR, LF, paragraph separator)
-	ClassS                    // Segment Separator (tab)
-	ClassWS                   // Whitespace (space, NBSP)
-	ClassON                   // Other Neutrals (punctuation, symbols)
+	ClassB  // Paragraph Separator (CR, LF, paragraph separator)
+	ClassS  // Segment Separator (tab)
+	ClassWS // Whitespace (space, NBSP)
+	ClassON // Other Neutrals (punctuation, symbols)
 
 	// Explicit formatting types control embedding and override of directionality.
 	// Reference: https://www.unicode.org/reports/tr9/#Explicit_Formatting_Types
 
-	ClassLRE                  // Left-to-Right Embedding (U+202A)
-	ClassLRO                  // Left-to-Right Override (U+202D)
-	ClassRLE                  // Right-to-Left Embedding (U+202B)
-	ClassRLO                  // Right-to-Left Override (U+202E)
-	ClassPDF                  // Pop Directional Format (U+202C)
-	ClassLRI                  // Left-to-Right Isolate (U+2066)
-	ClassRLI                  // Right-to-Left Isolate (U+2067)
-	ClassFSI                  // First Strong Isolate (U+2068)
-	ClassPDI                  // Pop Directional Isolate (U+2069)
+	ClassLRE // Left-to-Right Embedding (U+202A)
+	ClassLRO // Left-to-Right Override (U+202D)
+	ClassRLE // Right-to-Left Embedding (U+202B)
+	ClassRLO // Right-to-Left Override (U+202E)
+	ClassPDF // Pop Directional Format (U+202C)
+	ClassLRI // Left-to-Right Isolate (U+2066)
+	ClassRLI // Right-to-Left Isolate (U+2067)
+	ClassFSI // First Strong Isolate (U+2068)
+	ClassPDI // Pop Directional Isolate (U+2069)
 )
 
 // String returns the string representation of the BidiClass.

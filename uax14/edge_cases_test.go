@@ -280,12 +280,12 @@ func TestEdgeCases_CombiningMarks(t *testing.T) {
 		text    string
 		hyphens Hyphens
 	}{
-		{"e with acute", "café", HyphensManual},                              // é as single char
-		{"e with combining acute", "cafe\u0301", HyphensManual},              // é as e + combining acute
-		{"multiple combining marks", "e\u0301\u0302\u0303", HyphensManual},   // e with multiple marks
-		{"combining marks in word", "na\u00EFve", HyphensManual},             // ï as single char
-		{"emoji with skin tone", "👋🏻", HyphensManual},                        // Wave + light skin tone
-		{"emoji with ZWJ", "👨‍👩‍👧‍👦", HyphensManual},                  // Family emoji
+		{"e with acute", "café", HyphensManual},                            // é as single char
+		{"e with combining acute", "cafe\u0301", HyphensManual},            // é as e + combining acute
+		{"multiple combining marks", "e\u0301\u0302\u0303", HyphensManual}, // e with multiple marks
+		{"combining marks in word", "na\u00EFve", HyphensManual},           // ï as single char
+		{"emoji with skin tone", "👋🏻", HyphensManual},                      // Wave + light skin tone
+		{"emoji with ZWJ", "👨‍👩‍👧‍👦", HyphensManual},                       // Family emoji
 	}
 
 	for _, tt := range tests {
@@ -355,9 +355,9 @@ func TestEdgeCases_LongText(t *testing.T) {
 // TestEdgeCases_NoBreakOpportunities tests text with minimal break opportunities
 func TestEdgeCases_NoBreakOpportunities(t *testing.T) {
 	tests := []struct {
-		name     string
-		text     string
-		hyphens  Hyphens
+		name      string
+		text      string
+		hyphens   Hyphens
 		maxBreaks int // Maximum expected breaks (excluding start/end)
 	}{
 		{

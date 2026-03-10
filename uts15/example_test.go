@@ -72,7 +72,7 @@ func ExampleNFKD() {
 
 func ExampleNFC_stringComparison() {
 	// Comparing strings that may be in different normalization forms
-	s1 := "café" // Composed form (might be)
+	s1 := "café"       // Composed form (might be)
 	s2 := "cafe\u0301" // Decomposed form (e + acute)
 
 	// Direct comparison might fail
@@ -88,7 +88,7 @@ func ExampleNFC_stringComparison() {
 
 func ExampleIsNFC() {
 	// Check if a string is already in NFC form
-	composed := "\u00E9" // é (composed)
+	composed := "\u00E9"    // é (composed)
 	decomposed := "e\u0301" // e + combining acute
 
 	fmt.Printf("Composed is NFC: %v\n", uts15.IsNFC(composed))
@@ -186,7 +186,7 @@ func ExampleNFC_database() {
 	// Example: Normalizing text before storing in a database
 	// to ensure consistent searching and indexing
 
-	composed := "Jos\u00E9"   // Composed form
+	composed := "Jos\u00E9"    // Composed form
 	decomposed := "Jose\u0301" // Decomposed form (e + acute)
 
 	normalized1 := uts15.NFC(composed)

@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates word_data.go from WordBreakProperty.txt

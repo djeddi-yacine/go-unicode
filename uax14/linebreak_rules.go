@@ -53,7 +53,7 @@ type BreakDecision int
 
 const (
 	BreakNo  BreakDecision = iota // Don't break
-	BreakYes                       // Break allowed
+	BreakYes                      // Break allowed
 )
 
 // LineBreakRule checks if a rule applies and returns the action.
@@ -201,7 +201,7 @@ func ruleLB21_HY(ctx *LineBreakContext) (bool, BreakDecision) {
 		for checkIdx >= 0 {
 			checkClass := ctx.ClassAt(checkIdx)
 			if checkClass == ClassSP || isClassOrVariant(checkClass, ClassCM) ||
-			   checkClass == ClassZWJ || isClassOrVariant(checkClass, ClassAL) {
+				checkClass == ClassZWJ || isClassOrVariant(checkClass, ClassAL) {
 				// Skip spaces, combining marks, and AL characters
 				checkIdx--
 				continue
@@ -399,7 +399,7 @@ func ruleLB19_Guillemet(ctx *LineBreakContext) (bool, BreakDecision) {
 			nextClass := ctx.ClassAt(pos + 1)
 			// Allow break only if next character is not end-of-text indicators
 			if !isClassOrVariant(nextClass, ClassSP) && nextClass != ClassBK &&
-			   nextClass != ClassCR && nextClass != ClassLF && nextClass != ClassNL {
+				nextClass != ClassCR && nextClass != ClassLF && nextClass != ClassNL {
 				return true, BreakYes
 			}
 		}
@@ -425,7 +425,7 @@ func ruleLB19_Guillemet(ctx *LineBreakContext) (bool, BreakDecision) {
 					break
 				}
 				if checkRune == '.' || checkRune == ',' || checkRune == '!' ||
-				   checkRune == '?' || checkRune == ';' || checkRune == ':' {
+					checkRune == '?' || checkRune == ';' || checkRune == ':' {
 					hasPunctuation = true
 				}
 				wordLength++
@@ -503,7 +503,7 @@ func ruleLB19_CJK_QU_Pf_ID(ctx *LineBreakContext) (bool, BreakDecision) {
 	// Only apply to CJK curly quotes, not European guillemets
 	prevRune := ctx.RuneAt(pos - 1)
 	if prevRune != '\u201C' && prevRune != '\u201D' &&
-	   prevRune != '\u2018' && prevRune != '\u2019' {
+		prevRune != '\u2018' && prevRune != '\u2019' {
 		return false, BreakNo
 	}
 
@@ -512,9 +512,9 @@ func ruleLB19_CJK_QU_Pf_ID(ctx *LineBreakContext) (bool, BreakDecision) {
 		beforeQuoteClass := ctx.ClassAt(pos - 2)
 		// Allow break if preceded by CJK classes
 		if isClassOrVariant(beforeQuoteClass, ClassEX) ||
-		   isClassOrVariant(beforeQuoteClass, ClassID) ||
-		   isClassOrVariant(beforeQuoteClass, ClassCL) ||
-		   isClassOrVariant(beforeQuoteClass, ClassNS) {
+			isClassOrVariant(beforeQuoteClass, ClassID) ||
+			isClassOrVariant(beforeQuoteClass, ClassCL) ||
+			isClassOrVariant(beforeQuoteClass, ClassNS) {
 			return true, BreakYes
 		}
 	}
@@ -638,7 +638,7 @@ func ruleLB19_SP_QU_Pf(ctx *LineBreakContext) (bool, BreakDecision) {
 				break
 			}
 			if checkClass != ClassSP && !isClassOrVariant(checkClass, ClassCM) &&
-			   checkClass != ClassZWJ {
+				checkClass != ClassZWJ {
 				break
 			}
 		}
@@ -672,8 +672,8 @@ func ruleLB19_SP_QU_Pf(ctx *LineBreakContext) (bool, BreakDecision) {
 
 	// For CP/CL/EX, require opening quote with content between (stricter check)
 	if isClassOrVariant(lastNonSpace, ClassCP) ||
-	   isClassOrVariant(lastNonSpace, ClassCL) ||
-	   isClassOrVariant(lastNonSpace, ClassEX) {
+		isClassOrVariant(lastNonSpace, ClassCL) ||
+		isClassOrVariant(lastNonSpace, ClassEX) {
 		// Look back to find a matching opening quote with OP/CL content between
 		hasMatchingQuote := false
 		hasOpenParen := false
@@ -774,7 +774,7 @@ func ruleLB13(ctx *LineBreakContext) (bool, BreakDecision) {
 	curr := ctx.Curr()
 
 	if isClassOrVariant(curr, ClassCL) || curr == ClassCP ||
-	   isClassOrVariant(curr, ClassEX) || curr == ClassIS || curr == ClassSY {
+		isClassOrVariant(curr, ClassEX) || curr == ClassIS || curr == ClassSY {
 		return true, BreakNo
 	}
 
@@ -897,9 +897,9 @@ func ruleLB20(ctx *LineBreakContext) (bool, BreakDecision) {
 
 	// Don't break before these classes (pair table handles them)
 	if curr == ClassBK || curr == ClassCR || curr == ClassLF || curr == ClassNL ||
-	   curr == ClassSP || isClassOrVariant(curr, ClassCM) || curr == ClassZW ||
-	   isClassOrVariant(curr, ClassQU_Pi) || isClassOrVariant(curr, ClassQU_Pf) ||
-	   isClassOrVariant(curr, ClassNS) {
+		curr == ClassSP || isClassOrVariant(curr, ClassCM) || curr == ClassZW ||
+		isClassOrVariant(curr, ClassQU_Pi) || isClassOrVariant(curr, ClassQU_Pf) ||
+		isClassOrVariant(curr, ClassNS) {
 		return false, BreakNo
 	}
 
@@ -988,7 +988,7 @@ func ruleLB24(ctx *LineBreakContext) (bool, BreakDecision) {
 	curr := ctx.Curr()
 
 	if (isClassOrVariant(prev, ClassPR) || isClassOrVariant(prev, ClassPO)) &&
-	   (isClassOrVariant(curr, ClassAL) || curr == ClassHL) {
+		(isClassOrVariant(curr, ClassAL) || curr == ClassHL) {
 		return true, BreakNo
 	}
 
@@ -1538,93 +1538,93 @@ func ruleLB31(ctx *LineBreakContext) (bool, BreakDecision) {
 // Complex rules that override the pair table should come first.
 var lineBreakRules = []LineBreakRule{
 	// Mandatory breaks (LB4-LB5)
-	ruleLB4,                // BK ÷
-	ruleLB5a,               // CR × LF
-	ruleLB5b,               // CR ÷, LF ÷, NL ÷
+	ruleLB4,  // BK ÷
+	ruleLB5a, // CR × LF
+	ruleLB5b, // CR ÷, LF ÷, NL ÷
 
 	// Zero-width characters (LB7, LB8, LB8a)
-	ruleLB7,                // × ZW (don't break before ZW)
-	ruleLB8a,               // ZWJ × (don't break after ZWJ)
-	ruleLB8,                // ZW SP* ÷ (break after ZW)
+	ruleLB7,  // × ZW (don't break before ZW)
+	ruleLB8a, // ZWJ × (don't break after ZWJ)
+	ruleLB8,  // ZW SP* ÷ (break after ZW)
 
 	// Word joiner and glue (LB11, LB12, LB12a)
-	ruleLB11,               // WJ ×, × WJ
-	ruleLB12,               // GL ×
-	ruleLB12c,              // BA ÷ GL (exception to LB12a)
-	ruleLB12a,              // [^SP BA HY] × GL
+	ruleLB11,  // WJ ×, × WJ
+	ruleLB12,  // GL ×
+	ruleLB12c, // BA ÷ GL (exception to LB12a)
+	ruleLB12a, // [^SP BA HY] × GL
 
 	// Numeric expressions (LB25) - must come before LB13 to handle leading decimals
-	ruleLB25,               // NU (SY | IS)* × NU, etc.
+	ruleLB25, // NU (SY | IS)* × NU, etc.
 
 	// Closing punctuation (LB13)
-	ruleLB13,               // × [CL CP EX IS SY]
+	ruleLB13, // × [CL CP EX IS SY]
 
 	// Quotation marks (LB19 variants) - complex context-sensitive patterns
 	// MUST come before LB14/LB15 to handle exceptions
 	// Guillemet and German must come BEFORE QU_Pi_SP to override the default "don't break after opening quote" rule
 	// In these patterns, QU_Pi acts as a closing quote (guillemet « or German "), not an opening quote
-	ruleLB19_Guillemet,     // Guillemet separators (»word« pattern)
-	ruleLB19_German,        // German quotes („..." and ‚...')
-	ruleLB19_QU_Pi_SP,      // QU_Pi × SP* ×, with exception for QU_Pi SP ÷ OP when closing quote present
+	ruleLB19_Guillemet, // Guillemet separators (»word« pattern)
+	ruleLB19_German,    // German quotes („..." and ‚...')
+	ruleLB19_QU_Pi_SP,  // QU_Pi × SP* ×, with exception for QU_Pi SP ÷ OP when closing quote present
 
 	// Opening punctuation (LB14, LB15)
-	ruleLB14,               // OP SP* ×
-	ruleLB15,               // QU SP* × OP
+	ruleLB14, // OP SP* ×
+	ruleLB15, // QU SP* × OP
 
 	// Closing punctuation with nonstarter (LB16)
-	ruleLB16,               // (CL | CP) SP* × NS
+	ruleLB16, // (CL | CP) SP* × NS
 
 	// B2 sequences (LB17)
-	ruleLB17,               // B2 SP* × B2
+	ruleLB17, // B2 SP* × B2
 
 	// Note: LB18 (SP ÷) is handled by the pair table and BreakIndirect logic
 
 	// More quotation mark patterns
-	ruleLB19_NS_QU_Pi,      // NS ÷ QU_Pi (FULLWIDTH COLON)
-	ruleLB19_CJK_QU_Pf_ID,  // QU_Pf ÷ ID in CJK context
-	ruleLB19_CJK_ID_QU_Pi,  // ID ÷ QU_Pi in CJK context
-	ruleLB19_SP_QU_Pf,      // SP ÷ QU_Pf after specific classes
+	ruleLB19_NS_QU_Pi,     // NS ÷ QU_Pi (FULLWIDTH COLON)
+	ruleLB19_CJK_QU_Pf_ID, // QU_Pf ÷ ID in CJK context
+	ruleLB19_CJK_ID_QU_Pi, // ID ÷ QU_Pi in CJK context
+	ruleLB19_SP_QU_Pf,     // SP ÷ QU_Pf after specific classes
 
 	// Contingent break (LB20)
-	ruleLB20,               // ÷ CB, CB ÷
+	ruleLB20, // ÷ CB, CB ÷
 
 	// Hyphen handling (LB21)
-	ruleLB21_HY,            // Special HY (hyphen) handling
-	ruleLB21_HY_SP_CM,      // HY × HL with intervening CM after SP
-	ruleLB21_HH_Break,      // Hebrew hyphen (MAQAF) break after HL or AL (must come before ruleLB21_HH)
-	ruleLB21_HH,            // Hebrew hyphen (MAQAF) handling
+	ruleLB21_HY,       // Special HY (hyphen) handling
+	ruleLB21_HY_SP_CM, // HY × HL with intervening CM after SP
+	ruleLB21_HH_Break, // Hebrew hyphen (MAQAF) break after HL or AL (must come before ruleLB21_HH)
+	ruleLB21_HH,       // Hebrew hyphen (MAQAF) handling
 
 	// Alphabetics (LB22-LB24)
-	ruleLB22,               // AL × IN, HL × IN
-	ruleLB23,               // ID × PO, AL × NU, HL × NU
-	ruleLB23a,              // PR × ID, PR × (AL | HL), PO × (AL | HL)
-	ruleLB24,               // (PR | PO) × (AL | HL)
+	ruleLB22,  // AL × IN, HL × IN
+	ruleLB23,  // ID × PO, AL × NU, HL × NU
+	ruleLB23a, // PR × ID, PR × (AL | HL), PO × (AL | HL)
+	ruleLB24,  // (PR | PO) × (AL | HL)
 
 	// Note: LB25 moved before LB13 to handle leading decimals correctly
 
 	// Korean (LB26, LB27)
-	ruleLB26,               // JL × (JL | JV | H2 | H3), etc.
-	ruleLB27,               // (JL | JV | JT | H2 | H3) × PO
+	ruleLB26, // JL × (JL | JV | H2 | H3), etc.
+	ruleLB27, // (JL | JV | JT | H2 | H3) × PO
 
 	// Aksara/Indic (LB28 variants)
-	ruleLB28_AP,            // AP × (AK | AS | DottedCircle)
-	ruleLB28_Virama,        // (AK | AS | DottedCircle) × (VF | VI)
+	ruleLB28_AP,              // AP × (AK | AS | DottedCircle)
+	ruleLB28_Virama,          // (AK | AS | DottedCircle) × (VF | VI)
 	ruleLB28_VI_continuation, // VI × AL × VI
-	ruleLB28_Base_VI_Aksara, // Base × VI × (CM)* × AK/AS
-	ruleLB28_AS_VF,         // AS × AS × VF
+	ruleLB28_Base_VI_Aksara,  // Base × VI × (CM)* × AK/AS
+	ruleLB28_AS_VF,           // AS × AS × VF
 
 	// Infix separator (LB29)
-	ruleLB29,               // IS × (AL | HL)
+	ruleLB29, // IS × (AL | HL)
 
 	// Opening/closing punctuation (LB30)
-	ruleLB30,               // (AL | HL | NU) × OP
+	ruleLB30, // (AL | HL | NU) × OP
 
 	// Emoji (LB30a, LB30b)
-	ruleLB30a,              // RI × RI (regional indicators)
-	ruleLB30b,              // EB × EM, ExtPict × EM
+	ruleLB30a, // RI × RI (regional indicators)
+	ruleLB30b, // EB × EM, ExtPict × EM
 
 	// Ideograph emoji (LB30b extension)
-	ruleLB31,               // ID_ExtPict × EM
+	ruleLB31, // ID_ExtPict × EM
 }
 
 // checkRulesBucketed checks remaining rules after inline fast-path.

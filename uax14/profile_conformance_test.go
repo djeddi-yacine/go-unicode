@@ -11,8 +11,8 @@ import (
 
 // Rule profiling counters
 var (
-	ruleMatchCount = make(map[int]int64)  // rule index -> match count
-	ruleCheckCount = make(map[int]int64)  // rule index -> check count
+	ruleMatchCount = make(map[int]int64) // rule index -> match count
+	ruleCheckCount = make(map[int]int64) // rule index -> check count
 	pairTableCount int64
 	totalPositions int64
 )

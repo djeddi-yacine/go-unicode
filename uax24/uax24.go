@@ -85,9 +85,9 @@ type Script uint8
 // Script constants following ISO 15924 codes.
 // These are the most commonly used scripts in Unicode 17.0.0.
 const (
-	ScriptUnknown Script = iota // Unknown or unassigned
-	ScriptCommon                 // Zyyy - Characters used across multiple scripts
-	ScriptInherited              // Zinh - Combining marks that inherit script
+	ScriptUnknown   Script = iota // Unknown or unassigned
+	ScriptCommon                  // Zyyy - Characters used across multiple scripts
+	ScriptInherited               // Zinh - Combining marks that inherit script
 	ScriptAdlam
 	ScriptAhom
 	ScriptAnatolianHieroglyphs

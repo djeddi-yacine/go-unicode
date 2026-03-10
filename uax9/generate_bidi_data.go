@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates bidi_data.go from DerivedBidiClass.txt

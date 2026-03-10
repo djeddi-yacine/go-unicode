@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates break_data.go from Unicode property files
@@ -17,9 +18,9 @@ import (
 )
 
 const (
-	graphemeURL  = "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/GraphemeBreakProperty.txt"
-	wordURL      = "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/WordBreakProperty.txt"
-	sentenceURL  = "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/SentenceBreakProperty.txt"
+	graphemeURL    = "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/GraphemeBreakProperty.txt"
+	wordURL        = "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/WordBreakProperty.txt"
+	sentenceURL    = "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/SentenceBreakProperty.txt"
 	unicodeVersion = "17.0.0"
 )
 

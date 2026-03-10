@@ -18,19 +18,19 @@
 // three types of boundaries:
 //
 // 1. Grapheme Cluster Boundaries (https://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries)
-//    - User-perceived characters (what users think of as "characters")
-//    - Handles combining marks, emoji sequences, Hangul syllables
-//    - Essential for cursor movement, text selection, and character counting
+//   - User-perceived characters (what users think of as "characters")
+//   - Handles combining marks, emoji sequences, Hangul syllables
+//   - Essential for cursor movement, text selection, and character counting
 //
 // 2. Word Boundaries (https://www.unicode.org/reports/tr29/#Word_Boundaries)
-//    - Linguistic word boundaries for text selection and indexing
-//    - Handles contractions, hyphenated words, numeric sequences
-//    - Used in text editors, search engines, and NLP applications
+//   - Linguistic word boundaries for text selection and indexing
+//   - Handles contractions, hyphenated words, numeric sequences
+//   - Used in text editors, search engines, and NLP applications
 //
 // 3. Sentence Boundaries (https://www.unicode.org/reports/tr29/#Sentence_Boundaries)
-//    - Sentence breaks for text processing and analysis
-//    - Handles abbreviations, quotes, and various punctuation
-//    - Used in NLP, summarization, and text-to-speech
+//   - Sentence breaks for text processing and analysis
+//   - Handles abbreviations, quotes, and various punctuation
+//   - Used in NLP, summarization, and text-to-speech
 //
 // # Usage
 //

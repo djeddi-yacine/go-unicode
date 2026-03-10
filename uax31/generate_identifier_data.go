@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program generates identifier_data.go from Unicode data files

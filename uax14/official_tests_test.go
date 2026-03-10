@@ -59,7 +59,7 @@ func parseUnicodeTestLine(line string) (text string, expectedBreaks []int, err e
 
 		// Advance byte position if we have a rune at this position
 		if runeIdx < len(runes) {
-			if i < len(breaks)-1 {  // Not the final break marker
+			if i < len(breaks)-1 { // Not the final break marker
 				bytePos += len(string([]rune{runes[runeIdx]}))
 				runeIdx++
 			}
@@ -128,7 +128,7 @@ func TestOfficialUnicodeVectors(t *testing.T) {
 			passed++
 		} else {
 			failed++
-			if failed <= 10 {  // Only log first 10 failures
+			if failed <= 10 { // Only log first 10 failures
 				t.Logf("Line %d: MISMATCH", lineNum)
 				t.Logf("  Text: %q", text)
 				t.Logf("  Expected: %v", expectedBreaks)

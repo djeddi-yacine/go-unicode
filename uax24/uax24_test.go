@@ -214,8 +214,8 @@ func TestIsHiragana(t *testing.T) {
 		r        rune
 		expected bool
 	}{
-		{'\u3041', true}, // ぁ
-		{'\u3093', true}, // ん
+		{'\u3041', true},  // ぁ
+		{'\u3093', true},  // ん
 		{'\u30A1', false}, // Katakana
 		{'A', false},
 	}
@@ -233,8 +233,8 @@ func TestIsKatakana(t *testing.T) {
 		r        rune
 		expected bool
 	}{
-		{'\u30A1', true}, // ァ
-		{'\u30F6', true}, // ヶ
+		{'\u30A1', true},  // ァ
+		{'\u30F6', true},  // ヶ
 		{'\u3041', false}, // Hiragana
 		{'A', false},
 	}
@@ -386,13 +386,13 @@ func TestIsSingleScript(t *testing.T) {
 		expected bool
 	}{
 		{"Hello", true},
-		{"Hello123", true},       // Common doesn't count
-		{"Hello мир", false},     // Latin + Cyrillic
+		{"Hello123", true},   // Common doesn't count
+		{"Hello мир", false}, // Latin + Cyrillic
 		{"中文", true},
 		{"こんにちは", true},
-		{"Hello世界", false},      // Latin + Han
+		{"Hello世界", false}, // Latin + Han
 		{"", true},
-		{"123", true},            // Only Common
+		{"123", true}, // Only Common
 	}
 
 	for _, tt := range tests {
@@ -432,7 +432,7 @@ func TestScriptString(t *testing.T) {
 func BenchmarkLookupScript(b *testing.B) {
 	testRunes := []rune{
 		'A',      // Latin
-		'中',     // Han
+		'中',      // Han
 		'\u0410', // Cyrillic
 		'\u0391', // Greek
 		'0',      // Common

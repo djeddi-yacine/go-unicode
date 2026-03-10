@@ -111,11 +111,13 @@ func (l RestrictionLevel) String() string {
 // Skeleton returns the skeleton of a string for confusable detection.
 //
 // The skeleton algorithm normalizes strings to identify visual confusability:
-//   skeleton(X) = toNFD(toCaseFold(toNFKD(X)))
+//
+//	skeleton(X) = toNFD(toCaseFold(toNFKD(X)))
 //
 // Two strings are confusable if their skeletons are equal.
 //
 // Example:
+//
 //	skeleton("paypal") == skeleton("pаypal")  // true (Cyrillic 'а')
 //
 // See: https://www.unicode.org/reports/tr39/#Confusable_Detection
@@ -149,6 +151,7 @@ func Skeleton(s string) string {
 // they look similar enough to be confused by users.
 //
 // Example:
+//
 //	AreConfusable("scope", "ѕсоре")  // true (contains Cyrillic lookalikes)
 //	AreConfusable("hello", "world")  // false
 //
@@ -272,6 +275,7 @@ func GetRestrictionLevel(s string) RestrictionLevel {
 // Common and Inherited scripts.
 //
 // Example:
+//
 //	scripts := GetIdentifierScripts("Hello мир")  // [Latin, Cyrillic, Common]
 func GetIdentifierScripts(s string) []uax24.Script {
 	scriptSet := make(map[uax24.Script]bool)
@@ -295,6 +299,7 @@ func GetIdentifierScripts(s string) []uax24.Script {
 // more than one script, excluding Common and Inherited.
 //
 // Example:
+//
 //	IsMixedScript("hello")      // false (single script)
 //	IsMixedScript("hello世界")  // true (Latin + Han)
 //
@@ -329,9 +334,11 @@ func IsMixedScript(s string) bool {
 // according to UAX #31 Default Identifier Syntax.
 //
 // This checks that the string follows the pattern:
-//   <XID_Start> <XID_Continue>*
+//
+//	<XID_Start> <XID_Continue>*
 //
 // Example:
+//
 //	IsValidIdentifier("myVar")     // true
 //	IsValidIdentifier("my-var")    // false (hyphen not allowed)
 //	IsValidIdentifier("123var")    // false (starts with digit)
@@ -348,6 +355,7 @@ func IsValidIdentifier(s string) bool {
 //   - Does not contain invisible or deprecated characters
 //
 // Example:
+//
 //	IsSafeIdentifier("user_name")      // true
 //	IsSafeIdentifier("user\u200Bname") // false (contains zero-width space)
 func IsSafeIdentifier(s string) bool {
