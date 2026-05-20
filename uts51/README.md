@@ -15,7 +15,7 @@ Essential for:
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uts51
+go get github.com/SCKelemen/unicode/v6/uts51
 ```
 
 ## Quick Start
@@ -25,7 +25,7 @@ package main
 
 import (
     "fmt"
-    "github.com/SCKelemen/unicode/uts51"
+    "github.com/SCKelemen/unicode/v6/uts51"
 )
 
 func main() {

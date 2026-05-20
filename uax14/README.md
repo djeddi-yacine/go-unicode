@@ -17,7 +17,7 @@ This code was originally implemented in [github.com/SCKelemen/layout](https://gi
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uax14
+go get github.com/SCKelemen/unicode/v6/uax14
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ package main
 
 import (
     "fmt"
-    "github.com/SCKelemen/unicode/uax14"
+    "github.com/SCKelemen/unicode/v6/uax14"
 )
 
 func main() {

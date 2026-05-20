@@ -34,7 +34,7 @@
 //
 // Basic text reordering:
 //
-//	import "github.com/SCKelemen/unicode/uax9"
+//	import "github.com/SCKelemen/unicode/v6/uax9"
 //
 //	// Reorder mixed LTR/RTL text
 //	text := "Hello שלום world"

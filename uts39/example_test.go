@@ -3,7 +3,7 @@ package uts39_test
 import (
 	"fmt"
 
-	"github.com/SCKelemen/unicode/uts39"
+	"github.com/SCKelemen/unicode/v6/uts39"
 )
 
 func ExampleSkeleton() {

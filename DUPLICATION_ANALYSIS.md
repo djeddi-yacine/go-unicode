@@ -83,7 +83,7 @@ Per Unicode Standard design, these packages must work together:
 
 ```go
 // uax29/grapheme.go
-import "github.com/SCKelemen/unicode/uts51"
+import "github.com/SCKelemen/unicode/v6/uts51"
 
 // Replace isExtendedPictographic with:
 func isExtendedPictographic(r rune) bool {
@@ -178,7 +178,7 @@ func EmojiWidth(r rune) int {
 
 **Option B**: Make uts51 depend on uax11 and use it as a fallback:
 ```go
-import "github.com/SCKelemen/unicode/uax11"
+import "github.com/SCKelemen/unicode/v6/uax11"
 
 func EmojiWidth(r rune) int {
     if IsEmojiComponent(r) {
@@ -240,7 +240,7 @@ Go's `unicode` package (Unicode 15.0.0) does provide `Regional_Indicator`, but i
 
 Make uax29 depend on uts51 for emoji properties:
 
-1. Add import: `import "github.com/SCKelemen/unicode/uts51"`
+1. Add import: `import "github.com/SCKelemen/unicode/v6/uts51"`
 2. Replace `isExtendedPictographic()` implementation
 3. Replace regional indicator checks (2 locations)
 4. Replace emoji modifier checks (3 locations)
@@ -280,7 +280,7 @@ Consider these for future enhancements:
 Successfully refactored uax29 to depend on uts51 for emoji properties:
 
 **Changes Made**:
-1. ✅ Added `import "github.com/SCKelemen/unicode/uts51"` to grapheme.go, word.go, and sentence.go
+1. ✅ Added `import "github.com/SCKelemen/unicode/v6/uts51"` to grapheme.go, word.go, and sentence.go
 2. ✅ Replaced `isExtendedPictographic()` implementation with `uts51.IsExtendedPictographic()`
 3. ✅ Replaced regional indicator checks (2 locations) with `uts51.IsRegionalIndicator()`
 4. ✅ Replaced emoji modifier checks (3 locations) with `uts51.IsEmojiModifier()`

@@ -1,6 +1,6 @@
 # uax31 - Unicode Identifier and Pattern Syntax
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/uax31.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/uax31)
+[![Go Reference](https://pkg.go.dev/badge/github.com/SCKelemen/unicode/v6/uax31.svg)](https://pkg.go.dev/github.com/SCKelemen/unicode/v6/uax31)
 
 Implementation of UAX #31 (Unicode Identifier and Pattern Syntax) for determining which Unicode characters can appear in identifiers and pattern syntax.
 
@@ -47,7 +47,7 @@ Characters treated as whitespace in patterns:
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uax31
+go get github.com/SCKelemen/unicode/v6/uax31
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ go get github.com/SCKelemen/unicode/uax31
 ### Property Checks
 
 ```go
-import "github.com/SCKelemen/unicode/uax31"
+import "github.com/SCKelemen/unicode/v6/uax31"
 
 // Check if character can start an identifier
 if uax31.IsXIDStart('A') {

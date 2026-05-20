@@ -3,7 +3,7 @@ package uax24_test
 import (
 	"fmt"
 
-	"github.com/SCKelemen/unicode/uax24"
+	"github.com/SCKelemen/unicode/v6/uax24"
 )
 
 func ExampleLookupScript() {

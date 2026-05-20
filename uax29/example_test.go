@@ -3,7 +3,7 @@ package uax29_test
 import (
 	"fmt"
 
-	"github.com/SCKelemen/unicode/uax29"
+	"github.com/SCKelemen/unicode/v6/uax29"
 )
 
 func ExampleWords() {

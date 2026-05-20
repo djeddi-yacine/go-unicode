@@ -15,7 +15,7 @@ This package provides the `East_Asian_Width` property for Unicode characters, wh
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uax11
+go get github.com/SCKelemen/unicode/v6/uax11
 ```
 
 ## Quick Start
@@ -25,7 +25,7 @@ package main
 
 import (
     "fmt"
-    "github.com/SCKelemen/unicode/uax11"
+    "github.com/SCKelemen/unicode/v6/uax11"
 )
 
 func main() {

@@ -2,7 +2,7 @@ package uax14_test
 
 import (
 	"fmt"
-	"github.com/SCKelemen/unicode/uax14"
+	"github.com/SCKelemen/unicode/v6/uax14"
 )
 
 func ExampleFindLineBreakOpportunities() {

@@ -20,7 +20,7 @@
 //
 // # Usage
 //
-//	import "github.com/SCKelemen/unicode/uax50"
+//	import "github.com/SCKelemen/unicode/v6/uax50"
 //
 //	// Get orientation for a single character
 //	orientation := uax50.LookupOrientation('A')  // Returns Rotated

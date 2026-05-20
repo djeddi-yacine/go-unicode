@@ -31,7 +31,7 @@
 //
 // # Usage
 //
-//	import "github.com/SCKelemen/unicode/uax11"
+//	import "github.com/SCKelemen/unicode/v6/uax11"
 //
 //	// Get width classification for a single character
 //	width := uax11.LookupWidth('A')       // Returns Narrow

@@ -14,7 +14,7 @@ This package provides the `Vertical_Orientation` property for Unicode characters
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uax50
+go get github.com/SCKelemen/unicode/v6/uax50
 ```
 
 ## Quick Start
@@ -24,7 +24,7 @@ package main
 
 import (
     "fmt"
-    "github.com/SCKelemen/unicode/uax50"
+    "github.com/SCKelemen/unicode/v6/uax50"
 )
 
 func main() {

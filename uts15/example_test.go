@@ -3,7 +3,7 @@ package uts15_test
 import (
 	"fmt"
 
-	"github.com/SCKelemen/unicode/uts15"
+	"github.com/SCKelemen/unicode/v6/uts15"
 )
 
 func ExampleNFC() {

@@ -29,7 +29,7 @@ This package provides bidirectional text reordering for proper display of text c
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uax9
+go get github.com/SCKelemen/unicode/v6/uax9
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/SCKelemen/unicode/uax9"
+	"github.com/SCKelemen/unicode/v6/uax9"
 )
 
 func main() {

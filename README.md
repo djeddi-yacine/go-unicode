@@ -24,7 +24,7 @@ Supports:
 - **Automatic direction detection** - Smart paragraph base direction
 
 ```go
-import "github.com/SCKelemen/unicode/uax9"
+import "github.com/SCKelemen/unicode/v6/uax9"
 
 // Reorder mixed LTR/RTL text
 text := "Hello שלום world"
@@ -51,7 +51,7 @@ Supports:
 - Complete Unicode 17.0.0 data
 
 ```go
-import "github.com/SCKelemen/unicode/uax11"
+import "github.com/SCKelemen/unicode/v6/uax11"
 
 // Determine character width
 width := uax11.LookupWidth('中')  // Returns Wide
@@ -79,7 +79,7 @@ Supports:
 - Punctuation and numeric sequences
 
 ```go
-import "github.com/SCKelemen/unicode/uax14"
+import "github.com/SCKelemen/unicode/v6/uax14"
 
 text := "Hello world! This is a test."
 breaks := uax14.FindLineBreakOpportunities(text, uax14.HyphensManual)
@@ -99,7 +99,7 @@ Supports:
 - Single-script string validation
 
 ```go
-import "github.com/SCKelemen/unicode/uax24"
+import "github.com/SCKelemen/unicode/v6/uax24"
 
 // Get the script of a character
 script := uax24.LookupScript('A')      // Returns ScriptLatin
@@ -147,7 +147,7 @@ Supports:
   - Multi-script sentence terminators
 
 ```go
-import "github.com/SCKelemen/unicode/uax29"
+import "github.com/SCKelemen/unicode/v6/uax29"
 
 // Grapheme clusters
 graphemes := uax29.Graphemes("👨‍👩‍👧‍👦")  // Returns ["👨‍👩‍👧‍👦"]
@@ -194,7 +194,7 @@ Supports:
   - Stable across Unicode versions
 
 ```go
-import "github.com/SCKelemen/unicode/uax31"
+import "github.com/SCKelemen/unicode/v6/uax31"
 
 // Check if character can start an identifier
 if uax31.IsXIDStart('A') {
@@ -245,7 +245,7 @@ Supports:
 - East Asian typography and mixed-script vertical layouts
 
 ```go
-import "github.com/SCKelemen/unicode/uax50"
+import "github.com/SCKelemen/unicode/v6/uax50"
 
 // Determine how to display characters in vertical text
 orientation := uax50.LookupOrientation('中')  // Returns Upright
@@ -276,7 +276,7 @@ Supports:
 - **Integration** with UAX #11, #14, #29, #50
 
 ```go
-import "github.com/SCKelemen/unicode/uts51"
+import "github.com/SCKelemen/unicode/v6/uts51"
 
 // Check if character is emoji
 if uts51.IsEmoji('😀') {
@@ -310,7 +310,7 @@ Supports:
 - Complete Unicode 17.0.0 normalization data
 
 ```go
-import "github.com/SCKelemen/unicode/uts15"
+import "github.com/SCKelemen/unicode/v6/uts15"
 
 // Normalize to NFC (recommended for most uses)
 text := "café"  // May be composed or decomposed
@@ -360,7 +360,7 @@ Supports:
   - Minimum restriction level enforcement
 
 ```go
-import "github.com/SCKelemen/unicode/uts39"
+import "github.com/SCKelemen/unicode/v6/uts39"
 
 // Detect confusable strings (homograph attacks)
 if uts39.AreConfusable("paypal", "pаypal") {  // Second uses Cyrillic 'а'
@@ -404,16 +404,16 @@ func validateUsername(username string) error {
 ## Installation
 
 ```bash
-go get github.com/SCKelemen/unicode/uax9
-go get github.com/SCKelemen/unicode/uax11
-go get github.com/SCKelemen/unicode/uax14
-go get github.com/SCKelemen/unicode/uax24
-go get github.com/SCKelemen/unicode/uax29
-go get github.com/SCKelemen/unicode/uax31
-go get github.com/SCKelemen/unicode/uax50
-go get github.com/SCKelemen/unicode/uts15
-go get github.com/SCKelemen/unicode/uts39
-go get github.com/SCKelemen/unicode/uts51
+go get github.com/SCKelemen/unicode/v6/uax9
+go get github.com/SCKelemen/unicode/v6/uax11
+go get github.com/SCKelemen/unicode/v6/uax14
+go get github.com/SCKelemen/unicode/v6/uax24
+go get github.com/SCKelemen/unicode/v6/uax29
+go get github.com/SCKelemen/unicode/v6/uax31
+go get github.com/SCKelemen/unicode/v6/uax50
+go get github.com/SCKelemen/unicode/v6/uts15
+go get github.com/SCKelemen/unicode/v6/uts39
+go get github.com/SCKelemen/unicode/v6/uts51
 ```
 
 ## Design Philosophy
