@@ -1,2 +1,5 @@
 *.txt
 test_fsm
+
+# VSCode Per-Terminal Bash History
+.vscode/.history/

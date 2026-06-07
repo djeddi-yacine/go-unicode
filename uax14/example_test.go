@@ -2,7 +2,8 @@ package uax14_test
 
 import (
 	"fmt"
-	"github.com/SCKelemen/unicode/v6/uax14"
+
+	"github.com/djeddi-yacine/go-unicode/v6/uax14"
 )
 
 func ExampleFindLineBreakOpportunities() {
