@@ -3,7 +3,7 @@ package uts39_test
 import (
 	"fmt"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uts39"
+	"github.com/SCKelemen/unicode/v6/uts39"
 )
 
 func ExampleSkeleton() {

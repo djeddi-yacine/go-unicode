@@ -3,7 +3,7 @@ package uts39
 import (
 	"testing"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uax24"
+	"github.com/SCKelemen/unicode/v6/uax24"
 )
 
 func TestSkeleton(t *testing.T) {

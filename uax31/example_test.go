@@ -3,7 +3,7 @@ package uax31_test
 import (
 	"fmt"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uax31"
+	"github.com/SCKelemen/unicode/v6/uax31"
 )
 
 func ExampleIsXIDStart() {

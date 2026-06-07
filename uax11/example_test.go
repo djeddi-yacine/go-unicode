@@ -3,7 +3,7 @@ package uax11_test
 import (
 	"fmt"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uax11"
+	"github.com/SCKelemen/unicode/v6/uax11"
 )
 
 // ExampleLookupWidth demonstrates basic width lookup for various characters.

@@ -11,7 +11,7 @@
 //
 // Usage:
 //
-//	import "github.com/djeddi-yacine/go-unicode/v6/uax14"
+//	import "github.com/SCKelemen/unicode/v6/uax14"
 //
 //	text := "Hello world! This is a test."
 //	breakPoints := uax14.FindLineBreakOpportunities(text, uax14.HyphensManual)
@@ -32,7 +32,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uax11"
+	"github.com/SCKelemen/unicode/v6/uax11"
 )
 
 // Hyphens controls automatic hyphenation behavior.

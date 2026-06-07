@@ -3,7 +3,7 @@ package uax9_test
 import (
 	"fmt"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uax9"
+	"github.com/SCKelemen/unicode/v6/uax9"
 )
 
 // Example demonstrates basic bidirectional text reordering.

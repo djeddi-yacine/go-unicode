@@ -25,7 +25,7 @@
 //
 // # Usage
 //
-//	import "github.com/djeddi-yacine/go-unicode/v6/uts39"
+//	import "github.com/SCKelemen/unicode/v6/uts39"
 //
 //	// Check if two strings are visually confusable
 //	if uts39.AreConfusable("paypal", "pаypal") {  // Second uses Cyrillic 'а'
@@ -58,9 +58,9 @@ package uts39
 import (
 	"strings"
 
-	"github.com/djeddi-yacine/go-unicode/v6/uax24"
-	"github.com/djeddi-yacine/go-unicode/v6/uax31"
-	"github.com/djeddi-yacine/go-unicode/v6/uts15"
+	"github.com/SCKelemen/unicode/v6/uax24"
+	"github.com/SCKelemen/unicode/v6/uax31"
+	"github.com/SCKelemen/unicode/v6/uts15"
 )
 
 // RestrictionLevel represents the restriction level of an identifier.

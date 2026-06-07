@@ -34,7 +34,7 @@
 //
 // # Usage
 //
-//	import "github.com/djeddi-yacine/go-unicode/v6/uax29"
+//	import "github.com/SCKelemen/unicode/v6/uax29"
 //
 //	text := "Hello, world! How are you?"
 //

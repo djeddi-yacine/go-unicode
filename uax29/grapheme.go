@@ -1,7 +1,7 @@
 package uax29
 
 import (
-	"github.com/djeddi-yacine/go-unicode/v6/uts51"
+	"github.com/SCKelemen/unicode/v6/uts51"
 )
 
 // GraphemeBreakClass type and constants are defined in classes.go

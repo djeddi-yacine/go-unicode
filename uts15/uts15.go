@@ -48,7 +48,7 @@
 //
 // # Usage
 //
-//	import "github.com/djeddi-yacine/go-unicode/v6/uts15"
+//	import "github.com/SCKelemen/unicode/v6/uts15"
 //
 //	// Normalize to NFC (recommended for most uses)
 //	text := "café"  // may be composed or decomposed

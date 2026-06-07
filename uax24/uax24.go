@@ -54,7 +54,7 @@
 //
 // # Usage
 //
-//	import "github.com/djeddi-yacine/go-unicode/v6/uax24"
+//	import "github.com/SCKelemen/unicode/v6/uax24"
 //
 //	// Get the script of a character
 //	script := uax24.LookupScript('A')      // Returns ScriptLatin
