@@ -12,7 +12,7 @@
 //   - Explicit embeddings and overrides (LRE, RLE, LRO, RLO, PDF)
 //   - Isolating run sequences (LRI, RLI, FSI, PDI) per BD13
 //   - Deep embedding nesting (up to 125 levels)
-//   - Bracket pair matching (N0 rule)
+//   - Bracket pair matching (N0 rule) per BD16
 //   - All weak and neutral type resolution rules
 //
 // # Specification
@@ -176,7 +176,7 @@ func GetBidiClass(r rune) BidiClass {
 // are removed from display (e.g., explicit formatting characters).
 //
 // Reference: https://www.unicode.org/reports/tr9/#Basic_Display_Algorithm
-func ComputeLevels(classes []BidiClass, paraLevel int) []int {
+func ComputeLevels(classes []BidiClass, runes []rune, paraLevel int) []int {
 	n := len(classes)
 
 	// Keep original classes for L1 rule
@@ -207,8 +207,7 @@ func ComputeLevels(classes []BidiClass, paraLevel int) []int {
 
 	// Process each isolating run sequence
 	for _, seqIndexes := range sequences {
-		// Use explicit levels for sos/eos computation
-		seq := newIsolatingRunSequence(seqIndexes, classes, originalClasses, explicitLevels, paraLevel)
+		seq := newIsolatingRunSequence(seqIndexes, runes, classes, originalClasses, explicitLevels, paraLevel)
 
 		// W1-W7: Resolve weak types
 		// https://www.unicode.org/reports/tr9/#Resolving_Weak_Types
@@ -222,7 +221,6 @@ func ComputeLevels(classes []BidiClass, paraLevel int) []int {
 		// https://www.unicode.org/reports/tr9/#Resolving_Implicit_Levels
 		seq.resolveImplicitLevels()
 
-		// Apply resolved types and levels back to original arrays
 		for i, origIdx := range seq.indexes {
 			classes[origIdx] = seq.types[i]
 			levels[origIdx] = seq.levels[i]
@@ -290,7 +288,8 @@ func Reorder(text string, baseDir Direction) string {
 	}
 
 	// Compute bidirectional embedding levels
-	levels := ComputeLevels(classes, paraLevel)
+	// https://www.unicode.org/reports/tr9/#Basic_Display_Algorithm
+	levels := ComputeLevels(classes, runes, paraLevel)
 
 	// L2-L4: Reorder based on levels for visual display
 	// https://www.unicode.org/reports/tr9/#L2
@@ -1098,6 +1097,7 @@ func determineMatchingIsolates(classes []BidiClass) ([]int, []int) {
 // It contains all information needed to resolve types within the sequence.
 type isolatingRunSequence struct {
 	indexes       []int       // Original character indexes in this sequence
+	runes         []rune      // Original rune values (for N0 bracket lookup)
 	types         []BidiClass // Working copy of types for resolution
 	levels        []int       // Resolved levels for each character
 	level         int         // Embedding level of this sequence
@@ -1116,9 +1116,10 @@ func typeForLevel(level int) BidiClass {
 
 // newIsolatingRunSequence creates an isolating run sequence from character indexes.
 // X10: Determine sos and eos for the sequence.
-func newIsolatingRunSequence(indexes []int, classes, originalClasses []BidiClass, levels []int, paraLevel int) *isolatingRunSequence {
+func newIsolatingRunSequence(indexes []int, runes []rune, classes, originalClasses []BidiClass, levels []int, paraLevel int) *isolatingRunSequence {
 	seq := &isolatingRunSequence{
 		indexes:       indexes,
+		runes:         runes,
 		types:         make([]BidiClass, len(indexes)),
 		levels:        make([]int, len(indexes)),
 		originalTypes: make([]BidiClass, len(indexes)),
@@ -1307,11 +1308,115 @@ func (seq *isolatingRunSequence) resolveWeakTypes() {
 	}
 }
 
+// bracketStack and bracketPair support N0 paired bracket resolution (BD16).
+type bracketStack struct {
+	seqIdx    int
+	canonical rune
+}
+type bracketPair struct {
+	opener, closer int
+}
+
+// resolveBracketPair applies N0 to a single bracket pair and returns the
+// resolved direction (ClassL or ClassR) for both brackets.
+func (seq *isolatingRunSequence) resolveBracketPair(p bracketPair, level int) BidiClass {
+	dirEmbed := ClassL
+	if level&1 == 1 {
+		dirEmbed = ClassR
+	}
+
+	// N0-a: Scan content between brackets for strong types
+	hasL, hasR := false, false
+	for i := p.opener + 1; i < p.closer; i++ {
+		switch seq.types[i] {
+		case ClassL:
+			hasL = true
+		case ClassR, ClassAL, ClassEN, ClassAN:
+			hasR = true
+		}
+	}
+
+	// Determine direction per N0 rules b, c, d
+	switch {
+	case !hasL && !hasR:
+		return dirEmbed // No strong content
+	case hasL && hasR:
+		return dirEmbed // Mixed strong types
+	case hasR:
+		if dirEmbed == ClassR {
+			return ClassR // N0-b: content matches embedding
+		}
+		// N0-c: opposite strong (R) in LTR embedding
+		if seq.strongBeforeOpener(p.opener) == ClassR {
+			return ClassR
+		}
+		return ClassL
+	default: // hasL only
+		if dirEmbed == ClassL {
+			return ClassL // N0-b: content matches embedding
+		}
+		// N0-c: opposite strong (L) in RTL embedding
+		if seq.strongBeforeOpener(p.opener) == ClassL {
+			return ClassL
+		}
+		return ClassR
+	}
+}
+
+// strongBeforeOpener scans backward from the opening bracket to find the
+// first strong type (L or R, using eos for boundary). Returns the resolved
+// direction for N0-c preceding-strong check.
+func (seq *isolatingRunSequence) strongBeforeOpener(opener int) BidiClass {
+	for i := opener - 1; i >= 0; i-- {
+		switch seq.types[i] {
+		case ClassL:
+			return ClassL
+		case ClassR, ClassAL, ClassEN, ClassAN:
+			return ClassR
+		}
+	}
+	return seq.sos
+}
+
 // resolveNeutralTypes resolves neutral types (N0-N2) within this isolating run sequence.
 func (seq *isolatingRunSequence) resolveNeutralTypes() {
 	n := len(seq.types)
 
-	// N0: Paired bracket resolution would go here (not fully implemented)
+	// N0: Paired bracket resolution (BD16)
+	// Scan isolating run sequence for matching bracket pairs.
+	var stack []bracketStack
+	var pairs []bracketPair
+
+	for i, idx := range seq.indexes {
+		if seq.types[i] != ClassON {
+			continue
+		}
+		if idx < 0 || idx >= len(seq.runes) {
+			continue
+		}
+		paired, isOpen, ok := getBracketData(seq.runes[idx])
+		if !ok {
+			continue
+		}
+		if isOpen {
+			stack = append(stack, bracketStack{i, seq.runes[idx]})
+		} else {
+			for j := len(stack) - 1; j >= 0; j-- {
+				if stack[j].canonical == paired {
+					pairs = append(pairs, bracketPair{stack[j].seqIdx, i})
+					stack = stack[:j]
+					break
+				}
+			}
+		}
+	}
+
+	// Apply N0 to each identified bracket pair
+	for _, p := range pairs {
+		dirPair := seq.resolveBracketPair(p, seq.level)
+		seq.types[p.opener] = dirPair
+		seq.types[p.closer] = dirPair
+	}
 
 	// N1 and N2: Neutrals take direction from surrounding strong types
 	for i := 0; i < n; i++ {
@@ -1365,9 +1470,10 @@ func (seq *isolatingRunSequence) resolveImplicitLevels() {
 
 		// I1: For even levels
 		if level%2 == 0 {
-			if class == ClassR {
+			switch class {
+			case ClassR:
 				seq.levels[i] = level + 1
-			} else if class == ClassAN || class == ClassEN {
+			case ClassAN, ClassEN:
 				seq.levels[i] = level + 2
 			}
 		} else {

@@ -106,6 +106,6 @@ func BenchmarkComputeLevels(b *testing.B) {
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = ComputeLevels(classes, 0)
+		_ = ComputeLevels(classes, runes, 0)
 	}
 }

@@ -141,10 +141,9 @@ func parseExpectedReorder(line string) ([]int, error) {
 // computeLevels computes the resolved levels for a sequence of bidi classes.
 // This is a thin wrapper around the exported ComputeLevels function.
 func computeLevels(classes []BidiClass, paraLevel int) []int {
-	// Make a copy since ComputeLevels modifies the classes array
 	classesCopy := make([]BidiClass, len(classes))
 	copy(classesCopy, classes)
-	return ComputeLevels(classesCopy, paraLevel)
+	return ComputeLevels(classesCopy, nil, paraLevel)
 }
 
 // computeReorder computes the visual reordering for a sequence

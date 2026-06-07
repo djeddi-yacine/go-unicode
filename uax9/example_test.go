@@ -146,7 +146,7 @@ func ExampleComputeLevels() {
 	}
 
 	// Compute embedding levels (0 = LTR paragraph)
-	levels := uax9.ComputeLevels(classes, 0)
+	levels := uax9.ComputeLevels(classes, runes, 0)
 
 	// Display results
 	for i, r := range runes {
@@ -183,7 +183,7 @@ func ExampleComputeLevels_isolates() {
 	originalClasses := make([]uax9.BidiClass, len(classes))
 	copy(originalClasses, classes)
 
-	levels := uax9.ComputeLevels(classes, 0)
+	levels := uax9.ComputeLevels(classes, runes, 0)
 
 	// The Hebrew text inside RLI...PDI is isolated
 	fmt.Println("Text with isolate:")
