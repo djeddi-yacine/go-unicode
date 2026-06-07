@@ -3,7 +3,7 @@ package uax50_test
 import (
 	"fmt"
 
-	"github.com/SCKelemen/unicode/v6/uax50"
+	"github.com/djeddi-yacine/go-unicode/v6/uax50"
 )
 
 // ExampleLookupOrientation demonstrates basic orientation lookup for various characters.

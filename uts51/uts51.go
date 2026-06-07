@@ -60,7 +60,7 @@
 //
 // # Usage
 //
-//	import "github.com/SCKelemen/unicode/v6/uts51"
+//	import "github.com/djeddi-yacine/go-unicode/v6/uts51"
 //
 //	// Check if a character is emoji
 //	if uts51.IsEmoji('😀') {

@@ -44,7 +44,7 @@
 //
 // # Usage
 //
-//	import "github.com/SCKelemen/unicode/v6/uax31"
+//	import "github.com/djeddi-yacine/go-unicode/v6/uax31"
 //
 //	// Check if character can start an identifier
 //	if uax31.IsXIDStart('A') {
