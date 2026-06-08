@@ -156,6 +156,13 @@ func GetBidiClass(r rune) BidiClass {
 	return getBidiClassFromData(r)
 }
 
+// BracketPair returns the paired bracket and opening/closing status for a
+// rune. Returns ok=false if the rune is not a bracketed character per
+// Unicode BidiBrackets.txt.
+func BracketPair(r rune) (paired rune, isOpen bool, ok bool) {
+	return getBracketData(r)
+}
+
 // ComputeLevels computes the bidirectional embedding levels for a sequence of
 // characters according to UAX #9.
 //
